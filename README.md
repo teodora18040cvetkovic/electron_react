@@ -71,10 +71,10 @@
    ```javascript
    const { app, BrowserWindow } = require('electron')
    ```
-   - app: Ovaj objekat se koristi za kontrolu životnog ciklusa aplikacije (kao što su pokretanje i zatvaranje aplikacije).
-   - BrowserWindow: Ovaj objekat je korišćen za kreiranje novih prozora u aplikaciji. Svaka instanca BrowserWindow predstavlja jedan prozor (window) u aplikaciji.
+   - `app`: Ovaj objekat se koristi za kontrolu životnog ciklusa aplikacije (kao što su pokretanje i zatvaranje aplikacije).
+   - `BrowserWindow`: Ovaj objekat je korišćen za kreiranje novih prozora u aplikaciji. Svaka instanca BrowserWindow predstavlja jedan prozor (window) u aplikaciji.
 
-   
+   ### Funkcija za kreiranje prozora
   ```javascript
    function createWindow() {
      const win = new BrowserWindow({
@@ -87,13 +87,26 @@
 
      win.loadFile('index.html')
    }
-
-   app.whenReady().then(createWindow)
-
-   app.on('window-all-closed', () => {
-     if (process.platform !== 'darwin') {
-       app.quit()
-     }
-   })
    ```
+Funkcija `createWindow`, koristi se za kreiranje novog prozora aplikacije. 
+  -	Kreiranje prozora: new BrowserWindow({...}) kreira novi prozor sa određenim opcijama.
+      -	`width: 800`: Širina prozora je 800 piksela.
+      -	`height: 600`: Visina prozora je 600 piksela.
+      - `webPreferences`: Ovaj objekat sadrži dodatne opcije vezane za internetske stranice učitane unutar prozora.
+          - `nodeIntegration: true`: Omogućava korišćenje Node.js funkcionalnosti direktno u renderujućem procesu (HTML/JS stranici unutar prozora). Ovo znači da možete koristiti Node.js API-e (npr. fs, path, i druge funkcionalnosti) direktno u vašem front-end kodu. Međutim, ovo može predstavljati sigurnosni rizik, pa se u modernim aplikacijama obično koristi `contextBridge` i `preload` skripte za bolju sigurnost.  
+- Učitavanje HTML fajla: `win.loadFile('index.html')` govori Electron-u da učita HTML fajl sa imenom `index.html` u novom prozoru. Ovo je osnovni sadržaj koji će biti prikazan u prozoru.
 
+   ### Pokretanje aolikacije
+Ova linija znači da će se funkcija createWindow() pozvati čim aplikacija bude spremna za rad. app.whenReady() je promise koji se rešava kada Electron završi sa inicijalizacijom i aplikacija je spremna da pokrene GUI (grafički interfejs). Ovo je idealno mesto da se pokrene kreiranje prvog prozora.
+```javascript
+   app.whenReady().then(createWindow)
+```
+
+   ### Zatvaranje aplikacije
+```javascript 
+     app.on('window-all-closed', () => {
+       if (process.platform !== 'darwin') {
+         app.quit()
+       }
+     })
+```
