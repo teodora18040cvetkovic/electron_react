@@ -116,15 +116,53 @@ Ova linija znači da će se funkcija createWindow() pozvati čim aplikacija bude
      })
 ```
 # Kreiranje Electron aplikacije sa React framework-om
-
+Izvršavanjem sledeće linije koda kreira se direktorijum `my_app` sa osnovnom strukturom Electron'a i već postavljenjm Webpack-om za automatsko bundlovanje koda i resursa.
 ```bash
 npm init electron-app@latest my_app -- --template=webpack
 cd my_app
-npm start
+```
+
+### Instalacija porebnih Babel alata
+
+Sledeća komanda instalira nekoliko paketa vezanih za Babel, alat koji se koristi za transpilaciju JavaScript koda. U kontekstu Electron aplikacije (ili bilo koje druge aplikacije koja koristi React), ovo se koristi za pretvaranje modernog JavaScript koda i JSX sintakse u kod koji je kompatibilan sa različitim pretraživačima i okruženjima (u ovom slučaju Electron). 
+```bash
 npm install --save-dev @babel/core @babel/preset-react babel-loader
+```
+  - `@babel/core` omogućava transpilaciju modernog JavaScript-a u stariji, kompatibilan kod. 
+  - `@babel/preset-react` omogućava pretvaranje JSX-a (koji se koristi u React-u) u običan JavaScript. 
+  - `babel-loader` povezuje Webpack sa Babel-om, omogućavajući automatsku obrada JavaScript fajlova tokom bundlovanja aplikacije.
+    
+### Instalacija React i React DOM
+
+Da bi koristili Reat u Electron aplikaciji potrebno ga je instalirati sledećom komandom. 
+```bash
 npm install --save react react-dom
 ```
+  - `react` omogućava kreiranje i upravljanje React komponentama.
+  - `react'dom` omogućava renderovanje React komponenti u HTML-u.
 update webpack frm tsx to jsx
 moze index.js ili app.js se kreira fajl
 u renderer.js promeni se import na ./index.jsx
+### Promene u projektu pre pokretanja
 
+Da bi uspešno pokrenuli kreirani projekat moramo izvršiti nekoliko promena.
+### Promena u webpack.rules.js
+
+Ispod već postojećeg testa dodati sledeci deo koda. Deo test: /\.jsx?$/ se može zameniti  testČ /\.tsx?$/ u slučaju da se koristi tzpescript.
+```javascript
+...
+{
+    test: /\.jsx?$/,
+    use: {
+      loader: "babel-loader",
+      options: {
+        exclude: /node_modules/,
+        presets: ["@babel/preset-react"],
+      },
+    },
+...
+```
+
+```bash
+npm start
+```
