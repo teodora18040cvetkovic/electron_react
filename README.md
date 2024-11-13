@@ -140,15 +140,13 @@ npm install --save react react-dom
 ```
   - `react` omogućava kreiranje i upravljanje React komponentama.
   - `react'dom` omogućava renderovanje React komponenti u HTML-u.
-update webpack frm tsx to jsx
-moze index.js ili app.js se kreira fajl
-u renderer.js promeni se import na ./index.jsx
+    
 ### Promene u projektu pre pokretanja
 
 Da bi uspešno pokrenuli kreirani projekat moramo izvršiti nekoliko promena.
 ### Promena u webpack.rules.js
 
-Ispod već postojećeg testa dodati sledeci deo koda. Deo test: /\.jsx?$/ se može zameniti  testČ /\.tsx?$/ u slučaju da se koristi tzpescript.
+Ispod već postojećeg testa dodati sledeci deo koda. Deo `test: /\.jsx?$/` se može zameniti  `test: /\.tsx?$/` u slučaju da se koristi tzpescript.
 ```javascript
 ...
 {
@@ -162,7 +160,31 @@ Ispod već postojećeg testa dodati sledeci deo koda. Deo test: /\.jsx?$/ se mo�
     },
 ...
 ```
+### Dodavanje index.js i promena u renderer.js fajlu
+`index.js` predstavlja fajl koji kreiramo sami gde renderujemo glavnu komponentu našeg projekta. Sledeći deo koda predstavlja izgled `index.js` fajla. `Home` je glavna React komponenta koja se poziva pri pokretanju aplikacije. U ovoj komponenti se pozivaju sve gradivne komponente projekta.
+```javascript
+import * as React from "react";
+import { createRoot } from "react-dom/client";
+import Home from "./Home.js";
+import "./index.css";
 
+const root = createRoot(document.body);
+root.render(<Home />);
+
+```
+Potrebno je promeniti 
+```javascript
+...
+import "./index.css";,
+...
+```
+u
+```javascript
+...
+import "./index.js";,
+...
+```
+### Pokretanje projekta
 ```bash
 npm start
 ```
