@@ -115,3 +115,16 @@ Ova linija znači da će se funkcija createWindow() pozvati čim aplikacija bude
        }
      })
 ```
+# Kreiranje Electron aplikacije sa React framework-om
+
+```bash
+npm init electron-app@latest my_app -- --template=webpack
+cd my_app
+npm start
+npm install --save-dev @babel/core @babel/preset-react babel-loader
+npm install --save react react-dom
+```
+update webpack frm tsx to jsx
+moze index.js ili app.js se kreira fajl
+u renderer.js promeni se import na ./index.jsx
+
