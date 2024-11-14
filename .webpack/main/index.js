@@ -936,6 +936,11 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat */
+/******/ 	
+/******/ 	if (typeof __webpack_require__ !== 'undefined') __webpack_require__.ab = __dirname + "/native_modules/";
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
@@ -955,8 +960,10 @@ if (__webpack_require__(/*! electron-squirrel-startup */ "./node_modules/electro
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 500,
+    height: 700,
+    resizable: false,
+    icon: "path/to/assets/icon.ico",
     webPreferences: {
       preload: 'D:\\Master\\Napredno SWE\\el-react\\my_app\\.webpack\\renderer\\main_window\\preload.js'
     },

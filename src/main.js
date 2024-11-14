@@ -9,12 +9,14 @@ if (require("electron-squirrel-startup")) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 500,
+    height: 700,
+    resizable: false,
+    icon: __dirname + "assets/icon.ico",
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
-    autoHideMenuBar: true, //za sakrivanje manu bar
+    autoHideMenuBar: true,
   });
 
   // and load the index.html of the app.
