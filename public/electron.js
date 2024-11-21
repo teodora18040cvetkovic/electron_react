@@ -1,3 +1,4 @@
+// main.js
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
@@ -8,17 +9,13 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: false, // recommended for security
-      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
+      preload: path.join(__dirname, "preload.js"), // optional, for communication between React and Electron
     },
   });
 
-  // Load React app in Electron
-  mainWindow.loadURL("http://localhost:3000");
-
-  // Open DevTools if in development mode
-  mainWindow.loadURL(`file://${path.join(__dirname, "../build/index.html")}`);
-
+  //mainWindow.loadURL("http://localhost:3000"); // React development server
+  mainWindow.loadFile(path.join(__dirname, "..", "build", "index.html"));
   mainWindow.on("closed", () => {
     mainWindow = null;
   });

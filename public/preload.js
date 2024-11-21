@@ -1,4 +1,6 @@
+// preload.js
+const { contextBridge } = require("electron");
 
-window.addEventListener("DOMContentLoaded", () => {
-  console.log("Preload script loaded");
+contextBridge.exposeInMainWorld("electron", {
+  doSomething: () => console.log("This is a function exposed to React"),
 });
