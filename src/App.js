@@ -1,9 +1,7 @@
-import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
 import TheHeader from "./components/layout/TheHeader.js";
 import AddTransaction from "./components/transaction/AddTransaction.js";
-import BalanceComponent from "./components/transaction/BalanceComponent.js";
 import IncomeExpence from "./components/transaction/IncomeExpence.js";
 import TransactionList from "./components/transaction/TransactionList.js";
 import { useState } from "react";
@@ -37,8 +35,7 @@ function App() {
       <body>
         <TheHeader />
         <AddTransaction onAddTranasction={handleAddTransaction} />
-        <BalanceComponent total={total} />
-        <IncomeExpence income={income} expenses={expenses} />
+        <IncomeExpence income={income} expenses={expenses} total={total} />
         <TransactionList
           transactions={transactions}
           onDeleteTransaction={handleDeleteTransaction}

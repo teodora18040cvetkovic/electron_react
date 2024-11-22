@@ -1,12 +1,12 @@
 import React from "react";
-
+import "../../App.css";
 const TransactionList = ({ transactions, onDeleteTransaction }) => {
   const handleDelete = (id) => {
     onDeleteTransaction(id);
   };
   return (
-    <div>
-      <h3>History</h3>
+    <div className="transactionList">
+      <h3>Transaction List</h3>
       <ul id="list" className="list">
         {transactions.map((transaction) => (
           <li

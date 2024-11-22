@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../style.css";
+import "../../App.css";
 import ReactModal from "react-modal";
 const AddTransaction = ({ onAddTranasction }) => {
   const [text, setText] = useState("");
@@ -34,9 +35,9 @@ const AddTransaction = ({ onAddTranasction }) => {
   return (
     <div>
       <h3>Add new transaction</h3>
-      <form id="form" onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <div className="form-control">
-          <label htmlFor="text">Text</label>
+          <label htmlFor="text">Name your transaction</label>
           <input
             type="text"
             id="text"
@@ -46,8 +47,7 @@ const AddTransaction = ({ onAddTranasction }) => {
         </div>
         <div className="form-control">
           <label htmlFor="amount">
-            Amount <br />
-            (negative - expense, positive - income)
+            Amount <br />( - expense, + income)
           </label>
           <input
             type="text"

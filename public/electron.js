@@ -6,16 +6,16 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 468,
+    height: 1024,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
       preload: path.join(__dirname, "preload.js"), // optional, for communication between React and Electron
     },
   });
-
-  //mainWindow.loadURL("http://localhost:3000"); // React development server
-  mainWindow.loadFile(path.join(__dirname, "..", "build", "index.html"));
+  mainWindow.setMenuBarVisibility(false);
+  mainWindow.loadURL("http://localhost:3000"); // React development server
+  //mainWindow.loadFile(path.join(__dirname, "..", "build", "index.html"));
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
