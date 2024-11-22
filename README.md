@@ -45,13 +45,13 @@ Pokrenite komandu da kreirate `package.json` fajl:
 Ova komanda će vas voditi kroz nekoliko pitanja o vašem projektu. Možete pritisnuti Enter da biste prihvatili podrazumevane vrednosti.
 
 3. **Instalirajte Electron kao zavisnost**
-4. 
+   
 Da biste dodali Electron u svoj projekat, koristite:
    ```bash
    npm install electron --save-dev
    ```
 
-5. **Kreirajte osnovne fajlove za aplikaciju**
+4. **Kreirajte osnovne fajlove za aplikaciju**
 U glavnom direktorijumu vašeg projekta, napravite fajlove kao što su:
   - `index.html`: HTML fajl koji će se koristiti za interfejs aplikacije.  
   - `main.js`: JavaScript fajl koji će sadržati glavni proces vaše aplikacije.
@@ -116,75 +116,156 @@ Ova linija znači da će se funkcija createWindow() pozvati čim aplikacija bude
      })
 ```
 # Kreiranje Electron aplikacije sa React framework-om
-Izvršavanjem sledeće linije koda kreira se direktorijum `my_app` sa osnovnom strukturom Electron'a i već postavljenjm Webpack-om za automatsko bundlovanje koda i resursa.
+1. **Postavljanje React Aplikacije**
+Pokretanjem sledeće komande kreira se React aplikacija sa nazivom `my_app`. Potrebno je preći u direktorijum u kome se nalazi aplikacija.
+ ```bash
+   npx create-react-app my_app
+   cd my_app
+  ```
+
+2. **Instalacija Electron-a**
+
+Sledeća komanda instalira Electron u React apliakciji.
 ```bash
-npm init electron-app@latest my_app -- --template=webpack
-cd my_app
+  npm install electron --save-dev
 ```
+3. **Postavljanje Electron-a**
 
-### Instalacija porebnih Babel alata
+U public direktorijumu koji je kreiran prilokom kreiranja React aplikacije potrebno je kreirati fajl: `electron.js`. 
 
-Sledeća komanda instalira nekoliko paketa vezanih za Babel, alat koji se koristi za transpilaciju JavaScript koda. U kontekstu Electron aplikacije (ili bilo koje druge aplikacije koja koristi React), ovo se koristi za pretvaranje modernog JavaScript koda i JSX sintakse u kod koji je kompatibilan sa različitim pretraživačima i okruženjima (u ovom slučaju Electron). 
-```bash
-npm install --save-dev @babel/core @babel/preset-react babel-loader
-```
-  - `@babel/core` omogućava transpilaciju modernog JavaScript-a u stariji, kompatibilan kod. 
-  - `@babel/preset-react` omogućava pretvaranje JSX-a (koji se koristi u React-u) u običan JavaScript. 
-  - `babel-loader` povezuje Webpack sa Babel-om, omogućavajući automatsku obrada JavaScript fajlova tokom bundlovanja aplikacije.
-    
-### Instalacija React i React DOM
-
-Da bi koristili Reat u Electron aplikaciji potrebno ga je instalirati sledećom komandom. 
-```bash
-npm install --save react react-dom
-```
-  - `react` omogućava kreiranje i upravljanje React komponentama.
-  - `react'dom` omogućava renderovanje React komponenti u HTML-u.
-    
-### Promene u projektu pre pokretanja
-
-Da bi uspešno pokrenuli kreirani projekat moramo izvršiti nekoliko promena.
-### Promena u webpack.rules.js
-
-Ispod već postojećeg testa dodati sledeci deo koda. Deo `test: /\.jsx?$/` se može zameniti  `test: /\.tsx?$/` u slučaju da se koristi tzpescript.
 ```javascript
-...
-{
-    test: /\.jsx?$/,
-    use: {
-      loader: "babel-loader",
-      options: {
-        exclude: /node_modules/,
-        presets: ["@babel/preset-react"],
-      },
+// electron.js
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+
+let mainWindow;
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+    nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js'), // opcionalno, za komunikaciju između React-a i Electron-a
     },
-...
+  });
+  
+  mainWindow.loadURL('http://localhost:3000'); // React razvojni server
+  
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+  }
+  
+  app.on('ready', createWindow);
+  
+  app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+  });
+  
+  app.on('activate', () => {
+    if (mainWindow === null) {
+      createWindow();
+  }
+});
 ```
-### Dodavanje index.js i promena u renderer.js fajlu
-`index.js` predstavlja fajl koji kreiramo sami gde renderujemo glavnu komponentu našeg projekta. Sledeći deo koda predstavlja izgled `index.js` fajla. `Home` je glavna React komponenta koja se poziva pri pokretanju aplikacije. U ovoj komponenti se pozivaju sve gradivne komponente projekta.
+Ako želite da postignete komunikaciju između Vaše React aplikacije (renderer proces) i Electron-a (main proces), možete postaviti `preload.js` skriptu.
 ```javascript
-import * as React from "react";
-import { createRoot } from "react-dom/client";
-import Home from "./Home.js";
-import "./index.css";
+// preload.js
+const { contextBridge } = require('electron');
 
-const root = createRoot(document.body);
-root.render(<Home />);
+contextBridge.exposeInMainWorld('electron', {
+  doSomething: () => console.log('Ovo je funkcija koju izlažemo React-u'),
+});
+```
+Ova skripta izlaže specifične Electron funkcionalnosti React renderer procesu. U React-u, možete koristiti `window.electron` da pristupite izloženim funkcijama.
 
-```
-Potrebno je promeniti 
-```javascript
-...
-import "./index.css";,
-...
-```
-u
-```javascript
-...
-import "./index.js";,
-...
-```
-### Pokretanje projekta
+### Priprema aplikacije za pokretanje
+
+1. **Build-ovanje React aplikacije***
+Sledeća komanda će build-ovati React alipkaciju i kreirati `build` direktorijum koji sadrži optimizovanu verziju aplikacije.
 ```bash
-npm start
+npm run build
 ```
+2. **Modifikovanje electron.js fajla**
+U `electron.js` promeni liniju koja učitava React aplikaciju:
+ ```javascript
+ mainWindow.loadURL("http://localhost:3000"); => mainWindow.loadFile(path.join(__dirname,'..' ,'build', 'index.html'));
+ ```
+Ovo osigurava da kada je Electron aplikacija upakovana, učitaće izgrađenu React aplikaciju iz `build` foldera.
+
+3. **Modifikovanje `package.json`
+   U `package.json` dodaje se skripta za pokretanje Electron apliakcije sa React-om. Prvo je potrebno izvršiti sledeće komande u terminalu:
+```bash
+   npm install concurrently cross-env wait-on
+```
+  - `concurrently`:  za pokretanje više skripti paralelno.
+  - `cross-env`: za postavljanje promenljivih okruženja na način koji je kompatibilan sa operativnim sistemom
+  - `wait-on`: čekanje na dostupnost resursa
+  - 
+Zatim je potrebno dadati sledeću liniju koda:
+ ```javascript
+ "scripts": {
+    ...
+    "electron-react": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
+  },  
+ ```
+  - `concurrently`: pokreće dve komande u isto vreme.
+  - `"cross-env BROWSER=none npm start"`: pokreće React razvojni server (kroz `npm start`), ali bez otvaranja preglednika (`BROWSER=none`).
+  - `"wait-on http://localhost:3000 && electron ."`: čeka da React server bude dostupan na `http://localhost:3000`, a zatim pokreće Electron aplikaciju koja učitava React aplikaciju.
+
+### Pakovanje Electron aplikacije
+Da bi upakovali Electron aplikaciju u distribucioni format (kao što su `.exe` za Windows, `.dmg` za macOS, ili `.AppImage` za Linux), možete koristiti alate kao što je `electron-builder`.
+
+1. **Instalacija electron-builder**
+Sledeća komanda vrši instalaciju electron-builder-a.
+```bash
+npm install electron-builder --save-dev
+```
+3. **Konfiguracija `electron-builder`:**
+Potrebno je dodati `build` konfiguraciju u `package.json`:
+```json
+...
+"build": {
+  "appId": "com.example.myapp",
+  "productName": "My Electron App",
+  "files": [
+    "build/**/*",
+    "public/electron.js"
+  ],
+  "directories": {
+    "output": "dist"
+  },
+  "mac": {
+    "target": "dmg"
+  },
+  "win": {
+    "target": "nsis"
+  },
+  "linux": {
+    "target": "AppImage"
+  }
+}
+```
+Ova konfiguracija će odrediti kako treba da se pakuje aplikacija, koje platforme treba da se izgrade i gde treba da ide izlaz.
+3. **Build-ovanje aplikaciju:**
+Sledeće komande će izvršiti izgradnju apliakcije:
+```bash
+npm run build
+npm run electron-builder
+```
+Ovo će upakovati Vašu Electron aplikaciju i kreirati instalacioni fajl za platformu na kojoj se nalazite. Na primer, za macOS će kreirati `.dmg`, za Windows `.exe`, ili za Linux `.AppImage` u `dist` folderu.
+
+4. **Distribucija Aplikacije**
+Nakon što se proces izgradnje završi, možete distribuirati svoju upakovanu aplikaciju. Pakovana aplikacija će biti smeštena u `dist` direktorijumu koji ste definisali u konfiguraciji `build`.
+
+
+   
+
+
+
+
+
+
