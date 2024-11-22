@@ -45,13 +45,13 @@ Pokrenite komandu da kreirate `package.json` fajl:
 Ova komanda će vas voditi kroz nekoliko pitanja o vašem projektu. Možete pritisnuti Enter da biste prihvatili podrazumevane vrednosti.
 
 3. **Instalirajte Electron kao zavisnost**
-4. 
+   
 Da biste dodali Electron u svoj projekat, koristite:
    ```bash
    npm install electron --save-dev
    ```
 
-5. **Kreirajte osnovne fajlove za aplikaciju**
+4. **Kreirajte osnovne fajlove za aplikaciju**
 U glavnom direktorijumu vašeg projekta, napravite fajlove kao što su:
   - `index.html`: HTML fajl koji će se koristiti za interfejs aplikacije.  
   - `main.js`: JavaScript fajl koji će sadržati glavni proces vaše aplikacije.
@@ -217,6 +217,50 @@ Zatim je potrebno dadati sledeću liniju koda:
   - `"wait-on http://localhost:3000 && electron ."`: čeka da React server bude dostupan na `http://localhost:3000`, a zatim pokreće Electron aplikaciju koja učitava React aplikaciju.
 
 ### Pakovanje Electron aplikacije
+Da bi upakovali Electron aplikaciju u distribucioni format (kao što su `.exe` za Windows, `.dmg` za macOS, ili `.AppImage` za Linux), možete koristiti alate kao što je `electron-builder`.
+
+1. **Instalacija electron-builder**
+Sledeća komanda vrši instalaciju electron-builder-a.
+```bash
+npm install electron-builder --save-dev
+```
+3. **Konfiguracija `electron-builder`:**
+Potrebno je dodati `build` konfiguraciju u `package.json`:
+```json
+...
+"build": {
+  "appId": "com.example.myapp",
+  "productName": "My Electron App",
+  "files": [
+    "build/**/*",
+    "public/electron.js"
+  ],
+  "directories": {
+    "output": "dist"
+  },
+  "mac": {
+    "target": "dmg"
+  },
+  "win": {
+    "target": "nsis"
+  },
+  "linux": {
+    "target": "AppImage"
+  }
+}
+```
+Ova konfiguracija će odrediti kako treba da se pakuje aplikacija, koje platforme treba da se izgrade i gde treba da ide izlaz.
+3. **Build-ovanje aplikaciju:**
+Sledeće komande će izvršiti izgradnju apliakcije:
+```bash
+npm run build
+npm run electron-builder
+```
+Ovo će upakovati Vašu Electron aplikaciju i kreirati instalacioni fajl za platformu na kojoj se nalazite. Na primer, za macOS će kreirati `.dmg`, za Windows `.exe`, ili za Linux `.AppImage` u `dist` folderu.
+
+6. **Distribucija Aplikacije**
+Nakon što se proces izgradnje završi, možete distribuirati svoju upakovanu aplikaciju. Pakovana aplikacija će biti smeštena u `dist` direktorijumu koji ste definisali u konfiguraciji `build`.
+
 
    
 
