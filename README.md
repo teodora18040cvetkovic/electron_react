@@ -258,7 +258,7 @@ npm run electron-builder
 ```
 Ovo će upakovati Vašu Electron aplikaciju i kreirati instalacioni fajl za platformu na kojoj se nalazite. Na primer, za macOS će kreirati `.dmg`, za Windows `.exe`, ili za Linux `.AppImage` u `dist` folderu.
 
-6. **Distribucija Aplikacije**
+4. **Distribucija Aplikacije**
 Nakon što se proces izgradnje završi, možete distribuirati svoju upakovanu aplikaciju. Pakovana aplikacija će biti smeštena u `dist` direktorijumu koji ste definisali u konfiguraciji `build`.
 
 
