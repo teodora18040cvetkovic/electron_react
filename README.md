@@ -215,7 +215,14 @@ Zatim je potrebno dadati sledeću liniju koda:
   - `concurrently`: pokreće dve komande u isto vreme.
   - `"cross-env BROWSER=none npm start"`: pokreće React razvojni server (kroz `npm start`), ali bez otvaranja preglednika (`BROWSER=none`).
   - `"wait-on http://localhost:3000 && electron ."`: čeka da React server bude dostupan na `http://localhost:3000`, a zatim pokreće Electron aplikaciju koja učitava React aplikaciju.
-
+    
+4. **Pokretanje aplikacije**
+    Prvo je potrebno izvršiti sledeću komandu u terminalu:
+    ```bash
+    npm run electron-react
+    ```
+    Ova komanda vrši pokretanje Electron desktop aplikacije sa React-om.
+   
 ### Pakovanje Electron aplikacije
 Da bi upakovali Electron aplikaciju u distribucioni format (kao što su `.exe` za Windows, `.dmg` za macOS, ili `.AppImage` za Linux), možete koristiti alate kao što je `electron-builder`.
 
