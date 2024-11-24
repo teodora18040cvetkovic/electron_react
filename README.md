@@ -184,7 +184,7 @@ Ova skripta izlaže specifične Electron funkcionalnosti React renderer procesu.
 
 ### Priprema aplikacije za pokretanje
 
-1. **Build-ovanje React aplikacije***
+1. **Build-ovanje React aplikacije**
 Sledeća komanda će build-ovati React alipkaciju i kreirati `build` direktorijum koji sadrži optimizovanu verziju aplikacije.
 ```bash
 npm run build
@@ -196,7 +196,7 @@ U `electron.js` promeni liniju koja učitava React aplikaciju:
  ```
 Ovo osigurava da kada je Electron aplikacija upakovana, učitaće izgrađenu React aplikaciju iz `build` foldera.
 
-3. **Modifikovanje `package.json`
+3. **Modifikovanje `package.json`**
    U `package.json` dodaje se skripta za pokretanje Electron apliakcije sa React-om. Prvo je potrebno izvršiti sledeće komande u terminalu:
 ```bash
    npm install concurrently cross-env wait-on
