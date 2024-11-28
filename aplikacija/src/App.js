@@ -32,15 +32,13 @@ function App() {
   };
   return (
     <div className="App">
-      <body>
-        <TheHeader />
-        <AddTransaction onAddTranasction={handleAddTransaction} />
-        <IncomeExpence income={income} expenses={expenses} total={total} />
-        <TransactionList
-          transactions={transactions}
-          onDeleteTransaction={handleDeleteTransaction}
-        />
-      </body>
+      <TheHeader />
+      <AddTransaction onAddTranasction={handleAddTransaction} />
+      <IncomeExpence income={income} expenses={expenses} total={total} />
+      <TransactionList
+        transactions={transactions}
+        onDeleteTransaction={handleDeleteTransaction}
+      />
     </div>
   );
 }

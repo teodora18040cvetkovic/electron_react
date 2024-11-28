@@ -9,11 +9,11 @@ const AddTransaction = ({ onAddTranasction }) => {
   const customStyles = {
     content: {
       top: "35%",
-      left: "50%",
+      left: "48%",
       right: "auto",
       bottom: "auto",
       marginRight: "-50%",
-      width: "50%",
+      width: "40%",
       transform: "translate(-40%, -10%)",
     },
   };

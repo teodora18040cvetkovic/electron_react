@@ -2,7 +2,7 @@ header {
   grid-area: header;
   width: 100%;
   height: 5rem;
-  background-color: rgb(4, 62, 21);
+  background-color: #da64c1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +28,7 @@ form {
 }
 .btn {
   cursor: pointer;
-  background-color: #024106;
+  background-color: #da64c1;
   box-shadow: var(--box-shadow);
   color: #fff;
   border: 0;
@@ -49,6 +49,8 @@ form {
   grid-area: list;
   list-style-type: none;
   padding: 0;
+  max-height: 200px;
+  padding-right: 10px;
 }
 
 .list li {
