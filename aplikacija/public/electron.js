@@ -5,8 +5,8 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 468,
-    height: 1024,
+    width: 500,
+    height: 890,
     icon: path.join(__dirname, "..", "icon.ico"),
     webPreferences: {
       nodeIntegration: false,

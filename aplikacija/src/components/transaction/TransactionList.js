@@ -7,22 +7,37 @@ const TransactionList = ({ transactions, onDeleteTransaction }) => {
   return (
     <div className="transactionList">
       <h3>Transaction List</h3>
-      <ul id="list" className="list">
-        {transactions.map((transaction) => (
-          <li
-            key={transaction.id}
-            className={transaction.amount < 0 ? "minus" : "plus"}
-          >
-            {transaction.text} <span>{transaction.amount}RSD </span>
-            <button
-              className="delete-btn"
-              onClick={() => handleDelete(transaction.id)}
-            >
-              x
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className="table_container">
+        <table id="list" className="table">
+          <thead>
+            <th>Transaction</th>
+            <th>Amount (RSD)</th>
+            <th>Delete</th>
+          </thead>
+        </table>
+        <div className="tbBody">
+          <table className="table">
+            <tbody>
+              {transactions.map((transaction) => (
+                <tr
+                  key={transaction.id}
+                  className={transaction.amount < 0 ? "minus" : "plus"}
+                >
+                  <td> {transaction.text}</td> <td>{transaction.amount}RSD </td>
+                  <td>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(transaction.id)}
+                    >
+                      x
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

@@ -3,15 +3,19 @@
   background-image: url("../background_main.png");
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
+  font-family: "Lato", sans-serif;
+  font-size: 18px;
   display: grid;
   grid-template-areas:
     "header header header header"
     "form form inc inc"
     "list list list list ";
-  gap: 15px;
+  gap: 10px;
   min-height: 100vh;
   font-family: "Lato", sans-serif;
   font-size: 18px;
+  max-width: 500px;
 }
 
 .App-logo {
@@ -66,7 +70,4 @@ header {
 }
 .transactionList {
   grid-area: list;
-}
-
-body {
 }

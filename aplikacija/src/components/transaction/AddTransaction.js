@@ -9,12 +9,13 @@ const AddTransaction = ({ onAddTranasction }) => {
   const customStyles = {
     content: {
       top: "35%",
-      left: "48%",
+      left: "45%",
       right: "auto",
       bottom: "auto",
       marginRight: "-50%",
       width: "40%",
       transform: "translate(-40%, -10%)",
+      fontFamily: "Lato, sans-serif",
     },
   };
   const handleSubmit = (e) => {
@@ -33,7 +34,7 @@ const AddTransaction = ({ onAddTranasction }) => {
     setAmount("");
   };
   return (
-    <div>
+    <div className="add_transaction">
       <h3>Add new transaction</h3>
       <form className="form" onSubmit={handleSubmit}>
         <div className="form-control">

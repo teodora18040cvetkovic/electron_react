@@ -7,7 +7,7 @@ import TransactionList from "./components/transaction/TransactionList.js";
 import { useState } from "react";
 function App() {
   const [transactions, setTransactions] = useState([
-    { id: 1, text: "Bills", amount: 19.0 },
+    { id: 1, text: "Pocket Money", amount: 200.0 },
     { id: 2, text: "Fun", amount: -19.0 },
     { id: 3, text: "Shopping", amount: -19.0 },
   ]);
@@ -33,6 +33,7 @@ function App() {
   return (
     <div className="App">
       <TheHeader />
+
       <AddTransaction onAddTranasction={handleAddTransaction} />
       <IncomeExpence income={income} expenses={expenses} total={total} />
       <TransactionList
