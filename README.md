@@ -66,7 +66,7 @@ app.on('window-all-closed', () => {
 #### Korišćenje Nativnih API-ja:
 Glavni proces omogućava pristup nativnim funkcijama operativnog sistema, kao što su **meni**, **dijalozi** i **ikone u sistemskoj traci**.
 
-### Renderer Proces (Renderer Process)
+### Renderer proces (Renderer Process)
 
 **Renderer proces** se pokreće za svaki prozor aplikacije i odgovoran je za renderovanje web sadržaja. On koristi **Chromium** engine, pa se kod u ovom procesu ponaša kao običan web kod (HTML, CSS, JavaScript).
 
