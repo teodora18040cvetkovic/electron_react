@@ -5,8 +5,8 @@ Kreiranje aplikacije pomoću Electron-a i React-a. Osnovne karakteristike, predn
 [Šta je Electron framework?](#electron-framework) <br />
 [Ključne komponente](#ključne-komponente) <br />
 [Procesni model](#procesni-model) <br />
-    [Glavni proces (Main process)](#glavni-proces-main-process) <br />
-    [Renderer proces (Renderer Process)](#renderer-proces-renderer-process) <br />
+[Glavni proces (Main process)](#glavni-proces-main-process) <br />
+[Renderer proces (Renderer Process)](#renderer-proces-renderer-process) <br />
 [Bezbednost](#bezbednost) <br />
 [Prednosti i mane](#prednosti-i-mane) <br />
 [Preduslovi](#preduslovi) <br />
@@ -366,7 +366,7 @@ Ovo osigurava da kada je Electron aplikacija upakovana, učitaće izgrađenu Rea
   - `concurrently`:  za pokretanje više skripti paralelno.
   - `cross-env`: za postavljanje promenljivih okruženja na način koji je kompatibilan sa operativnim sistemom
   - `wait-on`: čekanje na dostupnost resursa
-  - 
+    
 Zatim je potrebno dadati sledeću liniju koda:
  ```javascript
  "scripts": {
