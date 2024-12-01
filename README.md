@@ -3,21 +3,38 @@
 Kreiranje aplikacije pomoću Electron-a i React-a. Osnovne karakteristike, prednosti i mane Electron framework-a. Prikaz izgleda desktop aplikacije.
 
 [Šta je Electron framework?](#electron-framework) <br />
-[Ključne komponente](#ključne-komponente)<br />
-[Procesni model](#procesni-model)<br />
-[Bezbednost](#bezbednost)<br />
-[Kreiranje Electron aplikacije sa React-om](#kreiranje-aplikacije-sa-react-om)<br />
-[Prednosti i mane](#prednosti-i-mane)<br />
+[Ključne komponente](#ključne-komponente) <br />
+[Procesni model](#procesni-model) <br />
+[Bezbednost](#bezbednost) <br />
+[Preduslovi](#preduslovi) <br />
+[Kreiranje Electron aplikacije](#kreiranje-aplikacije) <br />
+[Kreiranje Electron aplikacije sa React-om](#kreiranje-aplikacije-sa-react-om) <br />
+[Prednosti i mane](#prednosti-i-mane) <br />
 
 # Electron Framework
 Electron je besplatni softverski framework za kreiranje cross-platform desktop aplikacija koji je razvila i održava OpenJS fondacija.
   Electron je dizajniran za kreiranje desktop aplikacija korišćenjem web tehnologija, uglavnom JavaScript, HTML i CSS-a, moguće je koristiti i druge tehnologije kao sto su front-end framework. Omogućava kreiranje desktop apliakcija koje se mogu pokrenuti na Windows, masOS i Linkux operativnim sistemima. Ugrađivanjem [Chromium](https://www.chromium.org/chromium-projects/)  i [Node.js](https://nodejs.org/en) u svoj binarni program Electron omogućava da održavate jednu bazu koda i kreira aplikacije koje rade na više platforma.
 
-# Preduslovi
+# Ključne komponente
 
+**Chromium**
+
+Chromium je web pretraživač otvorenog koda koji koristi Google Chrome, i to je osnovna tehnologija koju Electron koristi za prikazivanje i prikaz korisničkog interfejsa (UI) aplikacije.
+Electron povezuje Chromium da bi obezbedio prozor pretraživača sa punim funkcijama za prikazivanje HTML-a, CSS-a i JavaScript-a, baš kao web stranica. To znači da programeri mogu da naprave korisnički interfejs svoje aplikacije koristeći standardne web tehnologije.
+
+**Node.js**
+
+Node.js je je JavaScript okruženje izgrađen na Chrome-ovom V8 JavaScript engin-u. Omogućava programerima da izvrše JavaScript kod na strani servera i pristupe sistemskim resursima. 
+Electron uključuje ugrađenu verziju Node.js-a, omogućavajući programerima da koriste JavaScript za pristup izvornim sistemskim funkcijama, kao što su čitanje i pisanje datoteka, interakcija sa bazama podataka, upravljanje mrežnim vezama itd.
+
+Zajedno, Chromium i Node.js omogućavaju razvoj desktop aplikacija sa web tehnologijama.
+
+
+
+## Preduslovi
 Pre nego što započnete sa radom u Electron-u, morate da imate sledeće alate i tehnologije instalirane na svom računaru:
 
-#### 1. **Node.js i npm**
+1. **Node.js i npm**
 
 Node.js je JavaScript runtime koji omogućava pokretanje JavaScript-a van web pregledača, dok npm (Node Package Manager) omogućava upravljanje paketima i bibliotekama koje koristite u projektu.
   
@@ -29,14 +46,14 @@ Da biste proverili da li su već instalirani, u komandnoj liniji pokrenite:
 Ako ne dobijete verziju, preuzmite Node.js sa zvanične stranice: [nodejs.org](https://nodejs.org/).
 Potrebno je imati instaliran neki code editor kao što je Visual Studio code. Možete ga preuzeti sa zvanične stranice [code.visualstudio.com](https://code.visualstudio.com/).
   
-#### 2. **Pretraga i instalacija Electron-a**
+2. **Pretraga i instalacija Electron-a**
   
 Kada imate Node.js i npm, sledeći korak je instalacija Electron-a. Najbolje je instalirati ga kao globalni paket, tako da ga možete koristiti u bilo kom projektu. To možete uraditi pomoću sledeće komande:
   ```bash
   npm install -g electron
   ```
 
-# Kreiranje Electron aplikacije
+### Kreiranje Electron aplikacije
 
 1. **Inicijalizujte novi projekat**
 
