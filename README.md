@@ -10,8 +10,8 @@ Kreiranje aplikacije pomoću Electron-a i React-a. Osnovne karakteristike, predn
 [Bezbednost](#bezbednost) <br />
 [Prednosti i mane](#prednosti-i-mane) <br />
 [Preduslovi](#preduslovi) <br />
-[Kreiranje Electron aplikacije](#kreiranje-aplikacije) <br />
-[Kreiranje Electron aplikacije sa React-om](#kreiranje-aplikacije-sa-react-om) <br />
+[Kreiranje Electron aplikacije](#kreiranje-electron-aplikacije) <br />
+[Kreiranje Electron aplikacije sa React-om](#kreiranje-electron-aplikacije-sa-react-om) <br />
 
 
 # Electron Framework
@@ -137,7 +137,7 @@ Kada imate Node.js i npm, sledeći korak je instalacija Electron-a. Najbolje je 
   npm install -g electron
   ```
 
-### Kreiranje Electron aplikacije
+# Kreiranje Electron aplikacije
 
 1. **Inicijalizujte novi projekat**
 
