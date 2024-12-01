@@ -5,7 +5,7 @@ Kreiranje aplikacije pomoću Electron-a i React-a. Osnovne karakteristike, predn
 [Šta je Electron framework?](#electron-framework) <br />
 [Ključne komponente](#ključne-komponente) <br />
 [Procesni model](#procesni-model) <br />
-    [Glavni proces (Main porcess)](#glavni-proces-main-process) <br />
+    [Glavni proces (Main process)](#glavni-proces-main-process) <br />
     [Renderer proces (Renderer Process)](#renderer-proces-renderer-process) <br />
 [Bezbednost](#bezbednost) <br />
 [Prednosti i mane](#prednosti-i-mane) <br />
@@ -36,7 +36,7 @@ Zajedno, Chromium i Node.js omogućavaju razvoj desktop aplikacija sa web tehnol
 Electron koristi više-procesni (multi-process) arhitektonski model koji potiče iz Chromiuma, što znači da je u tom smislu vrlo sličan modernim web pretraživačima. Ovaj pristup omogućava Electron aplikacijama veću stabilnost i efikasnost. 
 Više-procesni modelu Chromiumu omogućava da svaki tab (stranica) ima svoj proces, što znači da problem u jednom tabu ne utiče na ostatak pretraživača. Electron koristi isti pristup, ali sa dva glavna procesa: glavni proces (main process) i  renderer proces (renderer process).
 
-### Glavni proces (Main porcess)
+### Glavni proces (Main process)
 
 **Glavni proces** je jedinstveni ulazni proces za svaku Electron aplikaciju. On se pokreće u **Node.js** okruženju, što znači da može koristiti sve Node.js module i API-je.
 
