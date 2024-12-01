@@ -8,10 +8,11 @@ Kreiranje aplikacije pomoću Electron-a i React-a. Osnovne karakteristike, predn
     [Glavni proces (Main Process)](#glavni-proces) <br />
     [Renderer proces (Renderer Process)](#renderer-proces) <br />
 [Bezbednost](#bezbednost) <br />
+[Prednosti i mane](#prednosti-i-mane) <br />
 [Preduslovi](#preduslovi) <br />
 [Kreiranje Electron aplikacije](#kreiranje-aplikacije) <br />
 [Kreiranje Electron aplikacije sa React-om](#kreiranje-aplikacije-sa-react-om) <br />
-[Prednosti i mane](#prednosti-i-mane) <br />
+
 
 # Electron Framework
 Electron je besplatni softverski framework za kreiranje cross-platform desktop aplikacija koji je razvila i održava OpenJS fondacija.
@@ -98,6 +99,20 @@ Prepopruke za sigurnost: uključavanje contextIsolation i sigurno izlaganje funk
 
 Zbog **context isolation**, objekat **`window`** kojem pristupa vaša preload skripta je različit od objekta na koji web stranica ima pristup. Na primer, ako u preload skripti postavite `window.hello = 'wave'`, a context isolation je uključen, `window.hello` će biti `undefined` ako web stranica pokuša da ga pristupi.
 
+### Inter-Process Communication (IPC)
+**Inter-Process Communication (IPC)** u Electron-u omogućava komunikaciju između dva osnovna procesa aplikacije: glavnog procesa (main process) i renderer procesa (renderer process). Ova komunikacija je ključna za omogućavanje interakcije između web stranica prikazanih u renderer procesu (koje koriste HTML, CSS i JavaScript) i samih funkcionalnosti aplikacije koje su implementirane u glavnom procesu (koji koristi Node.js i Electron API-je).
+
+# Prednosti i mane
+
+Prednosti: <br />
+        -Jedna baza koda za više platformi (Windows, macOS, Linux). <br />
+        -Upotreba web tehnologija (HTML, CSS, JavaScript) što omogućava lakši prelazak sa web developmenta na desktop aplikacije. <br />
+        -Velika zajednica i ekosistem alata, pluginova i biblioteka. <br />
+        -Brza izrada prototipova zahvaljujući jednostavnom okruženju. <br />
+Mane:  <br />
+        -Visoka potrošnja resursa: Svaka aplikacija dolazi sa sopstvenim Chromium i Node.js instancama, što povećava memorijsku i procesorsku potrošnju.<br />
+        -Performanse: Elektron aplikacije mogu biti sporije u odnosu na nativne aplikacije zbog dodatnog sloja Chromium-a.<br />
+        -Veći fajlovi: Aplikacije mogu imati veće veličine instalacija zbog uključenih zavisnosti kao što su Chromium i Node.js.<br />
 
 
 ## Preduslovi
