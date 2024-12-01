@@ -2,12 +2,12 @@
 
 Kreiranje aplikacije pomoću Electron-a i React-a. Osnovne karakteristike, prednosti i mane Electron framework-a. Prikaz izgleda desktop aplikacije.
 
-[Šta je Electron framework?](#electron-framework) [^2]
-[Ključne komponente](#ključne-komponente)[^2]
-[Procesni model](#procesni-model)[^2]
-[Bezbednost](#bezbednost)[^2]
-[Kreiranje Electron aplikacije sa React-om](#kreiranje-aplikacije-sa-react-om)[^2]
-[Prednosti i mane](#prednosti-i-mane)[^2]
+[Šta je Electron framework?](#electron-framework) <br />
+[Ključne komponente](#ključne-komponente)<br />
+[Procesni model](#procesni-model)<br />
+[Bezbednost](#bezbednost)<br />
+[Kreiranje Electron aplikacije sa React-om](#kreiranje-aplikacije-sa-react-om)<br />
+[Prednosti i mane](#prednosti-i-mane)<br />
 
 # Electron Framework
 Electron je besplatni softverski framework za kreiranje cross-platform desktop aplikacija koji je razvila i održava OpenJS fondacija.
