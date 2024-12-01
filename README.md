@@ -91,16 +91,67 @@ Zbog **kontekstne izolacije**, preload skripta ne može direktno menjati globaln
 
 # Bezbednost
 
-Prepopruke za sigurnost: uključavanje contextIsolation i sigurno izlaganje funkcionalnosti kroz contextBridge.
+Prepopruke za sigurnost: uključavanje `contextIsolation` i sigurno izlaganje funkcionalnosti kroz `contextBridge`.
 
-### Context isolation 
+### **`contextIsolation`**
 
-**Context Isolation** je sigurnosna funkcija u Electronu koja osigurava da se skripte koje se pokreću u **preload** kontekstu i **Electron-ov interni kod** izvršavaju u odvojenom kontekstu od web sadržaja koji se učitava u **webContents**. Ova funkcionalnost sprečava web stranice da pristupe Electron internim API-jima ili API-jima koje preload skripta koristi, čime se povećava sigurnost aplikacije.
+`contextIsolation` je sigurnosna opcija koja razdvaja dva JavaScript okruženja u Electronu: ono u **rendererskom procesu** (UI) i ono u **glavnom procesu** (Node.js). Ako je `contextIsolation` uključen, kod u rendererskom procesu ne može direktno da koristi Node.js funkcije, kao što su čitanje fajlova ili pokretanje komandi.
 
-Zbog **context isolation**, objekat **`window`** kojem pristupa vaša preload skripta je različit od objekta na koji web stranica ima pristup. Na primer, ako u preload skripti postavite `window.hello = 'wave'`, a context isolation je uključen, `window.hello` će biti `undefined` ako web stranica pokuša da ga pristupi.
+Bez ove izolacije, zlonamerni kod u rendererskom procesu može da dobije pristup kritičnim funkcijama sistema (npr. pristup fajlovima), što je vrlo opasno. Korišćenjem `contextIsolation`, omogućavaš sigurniji rad aplikacije.
 
-### Inter-Process Communication (IPC)
-**Inter-Process Communication (IPC)** u Electron-u omogućava komunikaciju između dva osnovna procesa aplikacije: glavnog procesa (main process) i renderer procesa (renderer process). Ova komunikacija je ključna za omogućavanje interakcije između web stranica prikazanih u renderer procesu (koje koriste HTML, CSS i JavaScript) i samih funkcionalnosti aplikacije koje su implementirane u glavnom procesu (koji koristi Node.js i Electron API-je).
+U konfiguraciji `BrowserWindow`, postavite `contextIsolation: true`, čime omogućavate izolaciju između dva okruženja.
+
+```javascript
+const win = new BrowserWindow({
+       webPreferences: {
+         contextIsolation: true,
+         preload: path.join(__dirname, 'preload.js'),  // Preload skripta koja sigurno povezuje renderer sa glavnim procesom
+       }
+     });
+```
+### **`contextBridge`**
+`contextBridge` je alat koji omogućava sigurno izlaganje funkcionalnosti iz glavnog procesa (Node.js) prema rendererskom procesu (UI). Kada je `contextIsolation` uključen, renderer ne može direktno pristupiti funkcijama glavnog procesa, ali uz pomoć `contextBridge`, sigurno može koristiti određene funkcionalnosti, kao što je čitanje fajlova.
+
+Bez `contextBridge`, renderer proces bi mogao pokušati da koristi opasne funkcije koje ne želimo da izložimo, što bi moglo ugroziti sigurnost aplikacije. Korišćenjem `contextBridge`, ta funkcionalnost se daje samo onima koji su potrebni, a sve ostalo je zaštićeno.
+
+U **`preload.js`** fajlu, koristiš `contextBridge` da izložiš sigurne funkcije za renderer, bez da mu dozvoliš pristup celokupnom Node.js okruženju.
+
+**Primer:**
+ ```javascript
+     // preload.js
+     const { contextBridge, ipcRenderer } = require('electron');
+
+     // Sigurno izlažemo funkcionalnost za čitanje fajlova
+     contextBridge.exposeInMainWorld('safeAPI', {
+       readFile: (path) => ipcRenderer.invoke('read-file', path)  // Pozivanje funkcije u glavnom procesu
+     });
+     ```
+
+     Na strani **main.js** (glavni proces), osluškuješ pozive i vraćaš podatke:
+
+     ```javascript
+     // main.js
+     const { ipcMain, app, BrowserWindow } = require('electron');
+     const fs = require('fs');
+
+     ipcMain.handle('read-file', (event, path) => {
+       return fs.promises.readFile(path, 'utf-8');  // Čitanje fajla
+     });
+
+     app.whenReady().then(() => {
+       const win = new BrowserWindow({
+         webPreferences: {
+           preload: path.join(__dirname, 'preload.js')
+         }
+       });
+       win.loadURL('index.html');
+     });
+ ```
+
+- **`contextIsolation`** štiti aplikaciju tako što sprečava renderer da direktno koristi opasne funkcije Node.js.
+- **`contextBridge`** omogućava sigurno izlaganje funkcionalnosti rendererskom procesu, bez otkrivanja opasnih API-ja.
+
+Ova dva mehanizma zajedno omogućavaju da vaša aplikacija bude sigurna, dok istovremeno pruža potrebnu funkcionalnost za korisnički interfejs.
 
 # Prednosti i mane
 
