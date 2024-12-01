@@ -104,18 +104,18 @@ Zbog **context isolation**, objekat **`window`** kojem pristupa vaša preload sk
 
 # Prednosti i mane
 
-Prednosti: <br />
+**Prednosti:** <br />
         -Jedna baza koda za više platformi (Windows, macOS, Linux). <br />
         -Upotreba web tehnologija (HTML, CSS, JavaScript) što omogućava lakši prelazak sa web developmenta na desktop aplikacije. <br />
         -Velika zajednica i ekosistem alata, pluginova i biblioteka. <br />
         -Brza izrada prototipova zahvaljujući jednostavnom okruženju. <br />
-Mane:  <br />
+**Mane:**  <br />
         -Visoka potrošnja resursa: Svaka aplikacija dolazi sa sopstvenim Chromium i Node.js instancama, što povećava memorijsku i procesorsku potrošnju.<br />
         -Performanse: Elektron aplikacije mogu biti sporije u odnosu na nativne aplikacije zbog dodatnog sloja Chromium-a.<br />
         -Veći fajlovi: Aplikacije mogu imati veće veličine instalacija zbog uključenih zavisnosti kao što su Chromium i Node.js.<br />
 
 
-## Preduslovi
+# Preduslovi
 Pre nego što započnete sa radom u Electron-u, morate da imate sledeće alate i tehnologije instalirane na svom računaru:
 
 1. **Node.js i npm**
