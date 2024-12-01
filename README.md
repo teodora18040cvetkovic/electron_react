@@ -5,6 +5,8 @@ Kreiranje aplikacije pomoću Electron-a i React-a. Osnovne karakteristike, predn
 [Šta je Electron framework?](#electron-framework) <br />
 [Ključne komponente](#ključne-komponente) <br />
 [Procesni model](#procesni-model) <br />
+  [Glavni proces (Main Process)](#glavni-proces) <br />
+  [Renderer proces (Renderer Process)](#renderer-proces) <br />
 [Bezbednost](#bezbednost) <br />
 [Preduslovi](#preduslovi) <br />
 [Kreiranje Electron aplikacije](#kreiranje-aplikacije) <br />
@@ -20,7 +22,7 @@ Electron je besplatni softverski framework za kreiranje cross-platform desktop a
 **Chromium**
 
 Chromium je web pretraživač otvorenog koda koji koristi Google Chrome, i to je osnovna tehnologija koju Electron koristi za prikazivanje i prikaz korisničkog interfejsa (UI) aplikacije.
-Electron povezuje Chromium da bi obezbedio prozor pretraživača sa punim funkcijama za prikazivanje HTML-a, CSS-a i JavaScript-a, baš kao web stranica. To znači da programeri mogu da naprave korisnički interfejs svoje aplikacije koristeći standardne web tehnologije.
+Electron povezuje Chromium da bi obezbedio prozor pretraživača sa punim funkcijama za prikazivanje HTML-a, CSS-a i JavaScript-a, baš kao web stranica. To znači da programeri mogu da naprave korisnički interfejs svoje aplikacije koristeći standardne web tehnologije. 
 
 **Node.js**
 
@@ -28,6 +30,73 @@ Node.js je je JavaScript okruženje izgrađen na Chrome-ovom V8 JavaScript engin
 Electron uključuje ugrađenu verziju Node.js-a, omogućavajući programerima da koriste JavaScript za pristup izvornim sistemskim funkcijama, kao što su čitanje i pisanje datoteka, interakcija sa bazama podataka, upravljanje mrežnim vezama itd.
 
 Zajedno, Chromium i Node.js omogućavaju razvoj desktop aplikacija sa web tehnologijama.
+
+# Procesni model
+Electron koristi više-procesni (multi-process) arhitektonski model koji potiče iz Chromiuma, što znači da je u tom smislu vrlo sličan modernim web pretraživačima. Ovaj pristup omogućava Electron aplikacijama veću stabilnost i efikasnost. 
+Više-procesni modelu Chromiumu omogućava da svaki tab (stranica) ima svoj proces, što znači da problem u jednom tabu ne utiče na ostatak pretraživača. Electron koristi isti pristup, ali sa dva glavna procesa: glavni proces (main process) i  renderer proces (renderer process).
+
+### Glavni proces (Main porcess)
+
+**Glavni proces** je jedinstveni ulazni proces za svaku Electron aplikaciju. On se pokreće u **Node.js** okruženju, što znači da može koristiti sve Node.js module i API-je.
+
+#### Upravljanje Prozorima:
+Glavni proces je odgovoran za kreiranje i upravljanje aplikacijskim prozorima pomoću **`BrowserWindow`** modula. Svaki **BrowserWindow** stvara novi prozor u kojem se učitava web stranica u posebnom renderer procesu.
+
+**Primer koda**:
+```javascript
+const { BrowserWindow } = require('electron');
+const win = new BrowserWindow({ width: 800, height: 600 });
+win.loadURL('https://github.com');
+```
+  
+  - Svaki prozor (BrowserWindow) pokreće svoj **renderer proces**.
+  - Glavni proces može komunicirati s renderer procesom putem objekta `webContents`.
+
+#### Životni ciklus aplikacije:
+Glavni proces takođe kontroliše životni ciklus aplikacije, pomoću **`app`** modula. Na primer, možete dodati logiku da aplikacija automatski zatvori kada svi prozori budu zatvoreni (osim na macOS-u).
+
+**Primer**:
+```javascript
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+```
+
+#### Korišćenje Nativnih API-ja:
+Glavni proces omogućava pristup nativnim funkcijama operativnog sistema, kao što su **meni**, **dijalozi** i **ikone u sistemskoj traci**.
+
+### Renderer Proces (Renderer Process)
+
+**Renderer proces** se pokreće za svaki prozor aplikacije i odgovoran je za renderovanje web sadržaja. On koristi **Chromium** engine, pa se kod u ovom procesu ponaša kao običan web kod (HTML, CSS, JavaScript).
+
+  - Renderer procesi **nemaju pristup Node.js API-jima** direktno.
+  - Za interakciju s Node.js funkcionalnostima, koristi se **preload skripta**.
+
+#### Preload Skripte:
+**Preload skripta** se pokreće pre nego što se web sadržaj učita u renderer procesu. Ona omogućava renderer procesu da koristi Node.js API-je, ali na siguran način.
+
+**Primer**:
+```javascript
+const { contextBridge } = require('electron');
+contextBridge.exposeInMainWorld('myAPI', {
+  desktop: true
+});
+```
+
+Renderer proces može pristupiti ovom API-ju putem **`window.myAPI`**.
+
+#### Kontekstna izolacija:
+Zbog **kontekstne izolacije**, preload skripta ne može direktno menjati globalne promenljive renderer procesa. Umesto toga, koristi se **`contextBridge`** da bi se sigurno izložile funkcionalnosti.
+
+# Bezbednost
+
+Prepopruke za sigurnost: uključavanje contextIsolation i sigurno izlaganje funkcionalnosti kroz contextBridge.
+
+### Context isolation 
+
+**Context Isolation** je sigurnosna funkcija u Electronu koja osigurava da se skripte koje se pokreću u **preload** kontekstu i **Electron-ov interni kod** izvršavaju u odvojenom kontekstu od web sadržaja koji se učitava u **webContents**. Ova funkcionalnost sprečava web stranice da pristupe Electron internim API-jima ili API-jima koje preload skripta koristi, čime se povećava sigurnost aplikacije.
+
+Zbog **context isolation**, objekat **`window`** kojem pristupa vaša preload skripta je različit od objekta na koji web stranica ima pristup. Na primer, ako u preload skripti postavite `window.hello = 'wave'`, a context isolation je uključen, `window.hello` će biti `undefined` ako web stranica pokuša da ga pristupi.
 
 
 
