@@ -5,8 +5,8 @@ Kreiranje aplikacije pomoću Electron-a i React-a. Osnovne karakteristike, predn
 [Šta je Electron framework?](#electron-framework) <br />
 [Ključne komponente](#ključne-komponente) <br />
 [Procesni model](#procesni-model) <br />
-  [Glavni proces (Main Process)](#glavni-proces) <br />
-  [Renderer proces (Renderer Process)](#renderer-proces) <br />
+    [Glavni proces (Main Process)](#glavni-proces) <br />
+    [Renderer proces (Renderer Process)](#renderer-proces) <br />
 [Bezbednost](#bezbednost) <br />
 [Preduslovi](#preduslovi) <br />
 [Kreiranje Electron aplikacije](#kreiranje-aplikacije) <br />
