@@ -27,7 +27,7 @@ Electron povezuje Chromium da bi obezbedio prozor pretraživača sa punim funkci
 
 **Node.js**
 
-Node.js je je JavaScript okruženje izgrađen na Chrome-ovom V8 JavaScript engin-u. Omogućava programerima da izvrše JavaScript kod na strani servera i pristupe sistemskim resursima. 
+Node.js je JavaScript okruženje izgrađen na Chrome-ovom V8 JavaScript engin-u. Omogućava programerima da izvrše JavaScript kod na strani servera i pristupe sistemskim resursima. 
 Electron uključuje ugrađenu verziju Node.js-a, omogućavajući programerima da koriste JavaScript za pristup izvornim sistemskim funkcijama, kao što su čitanje i pisanje datoteka, interakcija sa bazama podataka, upravljanje mrežnim vezama itd.
 
 Zajedno, Chromium i Node.js omogućavaju razvoj desktop aplikacija sa web tehnologijama.
