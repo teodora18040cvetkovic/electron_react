@@ -32,30 +32,22 @@ Electron uključuje ugrađenu verziju Node.js-a, omogućavajući programerima 
 Zajedno, Chromium i Node.js omogućavaju razvoj desktop aplikacija sa web tehnologijama.
 
 # Procesni model
+
 Electron koristi više-procesni (multi-process) arhitektonski model koji potiče iz Chromiuma, što znači da je u tom smislu vrlo sličan modernim web pretraživačima. Ovaj pristup omogućava Electron aplikacijama veću stabilnost i efikasnost. 
 Više-procesni modelu Chromiumu omogućava da svaki tab (stranica) ima svoj proces, što znači da problem u jednom tabu ne utiče na ostatak pretraživača. Electron koristi isti pristup, ali sa dva glavna procesa: glavni proces (main process) i  renderer proces (renderer process).
 
 ### Glavni proces (Main process)
-Glavni proces u Electron-u je odgovoran za nekoliko ključnih funkcionalnosti koje omogućavaju pravilno funkcionisanje desktop aplikacije. On pokreće Node.js okruženje, kreira i upravlja prozorima pomoću `BrowserWindow` modula i kontroliše životni ciklus aplikacije. 
 
-**1. Pokreće Node.js okruženje**
-
-Glavni proces u Electron-u koristi Node.js kao runtime okruženje, što znači da je u mogućnosti da koristi sve funkcionalnosti koje nudi Node.js. To uključuje pristup lokalnim resursima računara, kao što su fajl sistem, mrežni zahtevi, baze podataka i druge sistemske funkcije.
-
-•	Node.js omogućava glavnom procesu da obavlja operacije koje zahtevaju pristup računarskim resursima, kao što su otvaranje fajlova, rad sa direktorijumima, pokretanje eksternih programa, pristup mreži i mnoge druge operacije koje nisu dozvoljene u render procesu (iz sigurnosnih razloga).
-
-•	Korišćenjem Node.js u glavnom procesu, Electron aplikacija može da koristi `npm` pakete i biblioteke koje nisu dostupne u standardnim web okruženjima, čime se omogućava rad sa lokalnim resursima i proširenje funkcionalnosti aplikacije.
-
-**2. Kreira i upravlja prozorima pomoću BrowserWindow modula**
-
-U Electron-u, prozor aplikacije je zapravo instanca klase `BrowserWindow`. Glavni proces koristi ovu klasu da kreira i kontroliše prozore (Windows) u aplikaciji.
-
-•	Kreiranje prozora: Glavni proces koristi `BrowserWindow` objekat za kreiranje novih prozora aplikacije. Ovaj objekat omogućava da se postave osnovna svojstva prozora, kao što su veličina, pozicija, naslov, ponašanje pri minimizaciji ili zatvaranju itd.
-
-•	Renderovanje sadržaja: `BrowserWindow` učitava i prikazuje HTML, CSS i JavaScript sadržaj koji dolazi iz render procesa. U većini slučajeva, render proces učitava lokalnu HTML stranicu (ako koristite statički sadržaj) ili pokreće aplikaciju kao web aplikaciju (ako koristite dinamički generisan sadržaj iz servisa ili API-ja).
-
-•	Mogućnosti kontrole: Glavni proces može da menja ponašanje prozora u bilo kom trenutku. Na primer, može da minimizuje prozor, zatvori ga, promeni njegovu veličinu, skupi ga u sistemsku traku (system tray), doda menije i obavštenja, ili izvrši bilo koju drugu operaciju.
-
+Glavni proces u Electron-u je odgovoran za nekoliko ključnih funkcionalnosti koje omogućavaju pravilno funkcionisanje desktop aplikacije. On pokreće Node.js okruženje, kreira i upravlja prozorima pomoću `BrowserWindow` modula i kontroliše životni ciklus aplikacije. <br />
+**1. Pokreće Node.js okruženje**<br />
+Glavni proces u Electron-u koristi Node.js kao runtime okruženje, što znači da je u mogućnosti da koristi sve funkcionalnosti koje nudi Node.js. To uključuje pristup lokalnim resursima računara, kao što su fajl sistem, mrežni zahtevi, baze podataka i druge sistemske funkcije.<br />
+•	Node.js omogućava glavnom procesu da obavlja operacije koje zahtevaju pristup računarskim resursima, kao što su otvaranje fajlova, rad sa direktorijumima, pokretanje eksternih programa, pristup mreži i mnoge druge operacije koje nisu dozvoljene u render procesu (iz sigurnosnih razloga).<br />
+•	Korišćenjem Node.js u glavnom procesu, Electron aplikacija može da koristi `npm` pakete i biblioteke koje nisu dostupne u standardnim web okruženjima, čime se omogućava rad sa lokalnim resursima i proširenje funkcionalnosti aplikacije.<br />
+**2. Kreira i upravlja prozorima pomoću BrowserWindow modula**<br />
+U Electron-u, prozor aplikacije je zapravo instanca klase `BrowserWindow`. Glavni proces koristi ovu klasu da kreira i kontroliše prozore (Windows) u aplikaciji.<br />
+•	Kreiranje prozora: Glavni proces koristi `BrowserWindow` objekat za kreiranje novih prozora aplikacije. Ovaj objekat omogućava da se postave osnovna svojstva prozora, kao što su veličina, pozicija, naslov, ponašanje pri minimizaciji ili zatvaranju itd.<br />
+•	Renderovanje sadržaja: `BrowserWindow` učitava i prikazuje HTML, CSS i JavaScript sadržaj koji dolazi iz render procesa. U većini slučajeva, render proces učitava lokalnu HTML stranicu (ako koristite statički sadržaj) ili pokreće aplikaciju kao web aplikaciju (ako koristite dinamički generisan sadržaj iz servisa ili API-ja).<br />
+•	Mogućnosti kontrole: Glavni proces može da menja ponašanje prozora u bilo kom trenutku. Na primer, može da minimizuje prozor, zatvori ga, promeni njegovu veličinu, skupi ga u sistemsku traku (system tray), doda menije i obavštenja, ili izvrši bilo koju drugu operaciju.<br />
 Primer kreiranja prozora u glavnom procesu:
 ```javascript
 const { app, BrowserWindow, ipcMain } = require("electron");
@@ -95,16 +87,11 @@ app.on("window-all-closed", () => {
 
 ```
 
-**3. Kontroliše životni ciklus aplikacije**
-
-Životni ciklus aplikacije u Electron-u obuhvata sve faze tokom kojih se aplikacija pokreće, izvršava i zatvara. Glavni proces je odgovoran za praćenje i upravljanje tim fazama.
-
-•	Pokretanje aplikacije: kada korisnik pokrene aplikaciju, glavni proces je prvi koji se aktivira i započinje izvršavanje. U ovoj fazi, glavni proces kreira početne prozore i omogućava sve inicijalizacione procese.
-
-•	Čekanje na zatvaranje aplikacije: glavni proces nadgleda sve prozore i kada svi prozori budu zatvoreni, on takođe zatvara aplikaciju. Na nekim platformama (npr. macOS), aplikacija može ostati aktivna čak i kada su svi prozori zatvoreni, ali je glavni proces i dalje odgovoran za prepoznavanje kada je aplikacija spremna da se zatvori.
-
-•	Preporučeni postupci pri zatvaranju: Elektron omogućava da se kod za čišćenje ili završne operacije (kao što su snimanje podataka, završavanje pozadinskih zadataka itd.) izvrši pre nego što aplikacija bude potpuno zatvorena.
-
+**3. Kontroliše životni ciklus aplikacije**<br />
+Životni ciklus aplikacije u Electron-u obuhvata sve faze tokom kojih se aplikacija pokreće, izvršava i zatvara. Glavni proces je odgovoran za praćenje i upravljanje tim fazama.<br />
+•	Pokretanje aplikacije: Kada korisnik pokrene aplikaciju, glavni proces je prvi koji se aktivira i započinje izvršavanje. U ovoj fazi, glavni proces kreira početne prozore i omogućava sve inicijalizacione procese.<br />
+•	Čekanje na zatvaranje aplikacije: Glavni proces nadgleda sve prozore i kada svi prozori budu zatvoreni, on takođe zatvara aplikaciju. Na nekim platformama (npr. macOS), aplikacija može ostati aktivna čak i kada su svi prozori zatvoreni, ali je glavni proces i dalje odgovoran za prepoznavanje kada je aplikacija spremna da se zatvori.<br />
+•	Preporučeni postupci pri zatvaranju: Elektron omogućava da se kod za čišćenje ili završne operacije (kao što su snimanje podataka, završavanje pozadinskih zadataka itd.) izvrši pre nego što aplikacija bude potpuno zatvorena.<br />
 Kontrola životnog ciklusa aplikacije u glavnom procesu:
 ```javascript
 const { app } = require('electron');
@@ -125,27 +112,76 @@ app.on('window-all-closed', () => {
 ```
 ### Renderer proces (Renderer Process)
 
-**Renderer proces** se pokreće za svaki prozor aplikacije i odgovoran je za renderovanje web sadržaja. On koristi **Chromium** engine, pa se kod u ovom procesu ponaša kao običan web kod (HTML, CSS, JavaScript).
-
-  - Renderer procesi **nemaju pristup Node.js API-jima** direktno.
-  - Za interakciju s Node.js funkcionalnostima, koristi se **preload skripta**.
-
-#### Preload Skripte:
-**Preload skripta** se pokreće pre nego što se web sadržaj učita u renderer procesu. Ona omogućava renderer procesu da koristi Node.js API-je, ali na siguran način.
-
-**Primer**:
+**Renderer proces** u Electron aplikaciji je odgovoran za renderovanje web sadržaja, kao što su HTML, CSS, i JavaScript, unutar aplikacije. Svaki prozor aplikacije pokreće svoj vlastiti renderer proces, što znači da više prozora može biti povezano sa različitim renderer procesima, a svi oni komuniciraju sa glavnim procesom putem IPC (inter-process communication) mehanizama.<br />
+**1. Renderovanje web sadržaja**<br />
+•	Renderovanje HTML, CSS i JavaScript: Renderer proces koristi Chromium engine za renderovanje sadržaja unutar aplikacije, kao što bi to radio bilo koji web browser. Zadatak renderer procesa je da prikaže korisnički interfejs, bilo da je statički (HTML + CSS) ili dinamički (JavaScript koji komunicira sa serverom ili backendom).<br />
+•	Izolacija i sigurnost: Renderer proces se pokreće unutar izolovanog okruženja kako bi se povećala sigurnost. To znači da ne može direktno pristupiti sistemskim resursima ili Node.js API-jima. Da bi komunicirao sa sistemom, koristi preload skripte ili IPC mehanizme za slanje i primanje podataka između glavnog procesa i renderer procesa.<br />
+•	Context Isolation: Electron pruža kontekstnu izolaciju koja sprečava da renderer proces menja globalne varijable i direktno manipuliše sa kodom glavnog procesa. Ova zaštita pomaže da se aplikacije zaštite od napada kao što su Cross-Site Scripting (XSS). Preload skripte omogućavaju sigurno izlaganje API-ja.<br />
+**2. Komunikacija sa glavnim procesom**<br />
+•	IPC (Inter-Process Communication): Renderer proces komunicira sa glavnim procesom koristeći IPC (Inter-Process Communication). Kroz IPC, renderer proces može da šalje poruke glavnom procesu, na primer, da otvori fajl, da pošalje korisničke podatke, ili da pokrene neku sistemsku funkciju koja nije dozvoljena unutar renderer procesa.<br />
+Primer IPC komunikacije:<br />
+Renderer proces (JavaScript kod u aplikaciji):
 ```javascript
-const { contextBridge } = require('electron');
-contextBridge.exposeInMainWorld('myAPI', {
-  desktop: true
+const { ipcRenderer } = require('electron');
+
+// Poslati poruku glavnom procesu
+ipcRenderer.send('pozdrav', 'Zdravo iz renderer procesa!');
+
+// Primanje odgovora od glavnog procesa
+ipcRenderer.on('odgovor', (event, message) => {
+  console.log(message); // 'Zdravo od glavnog procesa!'
 });
 ```
+Glavni proces (JavaScript kod u glavnom procesu):
+```javascript
+const { ipcMain } = require('electron');
 
-Renderer proces može pristupiti ovom API-ju putem **`window.myAPI`**.
+// Prihvatiti poruku od renderer procesa
+ipcMain.on('pozdrav', (event, arg) => {
+  console.log(arg); // 'Zdravo iz renderer procesa!'
+  
+  // Poslati odgovor nazad renderer procesu
+  event.reply('odgovor', 'Zdravo od glavnog procesa!');
+});
+```
+**3. Preload skripte i sigurnost**<br />
+•	Preload skripta: Renderer proces ne može direktno koristiti Node.js API-je zbog sigurnosnih razloga. Međutim, preload skripta omogućava renderer procesu da pristupi Node.js funkcijama u kontrolisanom okruženju. Preload skripte se učitavaju pre nego što bilo koji web sadržaj postane dostupan, čime se omogućava sigurna izloženost API-ja i funkcionalnosti.<br />
+Primer preload skripte:
+```javascript
+// preload.js
+const { contextBridge } = require('electron');
 
-#### Kontekstna izolacija:
-Zbog **kontekstne izolacije**, preload skripta ne može direktno menjati globalne promenljive renderer procesa. Umesto toga, koristi se **`contextBridge`** da bi se sigurno izložile funkcionalnosti.
-
+// Izlaganje sigurno kontrolisanih funkcionalnosti renderer procesu
+contextBridge.exposeInMainWorld('myAPI', {
+  desktop: true,
+  sayHello: () => 'Hello from preload script!'
+});
+```
+Renderer proces (JavaScript u aplikaciji):
+```javascript
+console.log(window.myAPI.desktop); // true
+console.log(window.myAPI.sayHello()); // 'Hello from preload script!'
+```
+Na ovaj način, renderer proces može koristiti sigurno izložene funkcije, dok je pristup Node.js API-ju kontrolisan i zaštićen.<br />
+**4. Sigurnost i izolacija**<br />
+•	Kontekstna izolacija (Context Isolation): Sa uključenom kontekstnom izolacijom (koja je podrazumevano omogućena u novijim verzijama Electron-a), renderer proces je potpuno izolovan od main procesa i sistema. Ne može direktno manipulisati globalnim varijablama ili pristupiti Node.js API-jima bez prethodnog izlaganja putem preload skripte.<br />
+Ovaj model čini aplikaciju sigurnijom jer sprečava zlonamerni JavaScript kod u renderer procesu da ima direktan pristup sistemskim resursima.<br />
+•	nodeIntegration: Preporučuje se da nodeIntegration bude isključen u renderer procesu, jer omogućavanje nodeIntegration-a bi omogućilo renderer procesu da direktno koristi Node.js API-je, što može biti opasno, posebno kada se aplikacija povezuje sa nesigurnim web sadržajem.<br />
+Primer onemogućavanja nodeIntegration:
+```javascript
+win = new BrowserWindow({
+  width: 800,
+  height: 600,
+  webPreferences: {
+    nodeIntegration: false, // Isključuje Node.js integraciju
+    contextIsolation: true, // Omogućava izolaciju konteksta
+    preload: path.join(__dirname, 'preload.js') // Specifikacija preload skripte
+  }
+});
+```
+**5. Životni ciklus renderer procesa**<br />
+•	Pokretanje i zatvaranje prozora: Renderer proces se pokreće kada se stvori novi prozor u glavnom procesu pomoću `BrowserWindow`. Svaki prozor ima svoj vlastiti renderer proces. Kada se prozor zatvori, renderer proces se takođe uništava, čime se oslobađaju svi resursi koji su bili povezani sa tim procesom.<br />
+•	Rad sa više prozora: Electron omogućava kreiranje više prozora u aplikaciji, a svaki prozor može imati svoj vlastiti renderer proces. Ovaj pristup omogućava veću fleksibilnost i performanse aplikacije.<br />
 
 # Prednosti i mane
 
