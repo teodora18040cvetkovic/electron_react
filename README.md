@@ -36,35 +36,93 @@ Electron koristi više-procesni (multi-process) arhitektonski model koji potiče
 Više-procesni modelu Chromiumu omogućava da svaki tab (stranica) ima svoj proces, što znači da problem u jednom tabu ne utiče na ostatak pretraživača. Electron koristi isti pristup, ali sa dva glavna procesa: glavni proces (main process) i  renderer proces (renderer process).
 
 ### Glavni proces (Main process)
+Glavni proces u Electron-u je odgovoran za nekoliko ključnih funkcionalnosti koje omogućavaju pravilno funkcionisanje desktop aplikacije. On pokreće Node.js okruženje, kreira i upravlja prozorima pomoću `BrowserWindow` modula i kontroliše životni ciklus aplikacije. 
 
-**Glavni proces** je jedinstveni ulazni proces za svaku Electron aplikaciju. On se pokreće u **Node.js** okruženju, što znači da može koristiti sve Node.js module i API-je.
+**1. Pokreće Node.js okruženje**
 
-#### Upravljanje Prozorima:
-Glavni proces je odgovoran za kreiranje i upravljanje aplikacijskim prozorima pomoću **`BrowserWindow`** modula. Svaki **BrowserWindow** stvara novi prozor u kojem se učitava web stranica u posebnom renderer procesu.
+Glavni proces u Electron-u koristi Node.js kao runtime okruženje, što znači da je u mogućnosti da koristi sve funkcionalnosti koje nudi Node.js. To uključuje pristup lokalnim resursima računara, kao što su fajl sistem, mrežni zahtevi, baze podataka i druge sistemske funkcije.
 
-**Primer koda**:
+•	Node.js omogućava glavnom procesu da obavlja operacije koje zahtevaju pristup računarskim resursima, kao što su otvaranje fajlova, rad sa direktorijumima, pokretanje eksternih programa, pristup mreži i mnoge druge operacije koje nisu dozvoljene u render procesu (iz sigurnosnih razloga).
+
+•	Korišćenjem Node.js u glavnom procesu, Electron aplikacija može da koristi `npm` pakete i biblioteke koje nisu dostupne u standardnim web okruženjima, čime se omogućava rad sa lokalnim resursima i proširenje funkcionalnosti aplikacije.
+
+**2. Kreira i upravlja prozorima pomoću BrowserWindow modula**
+
+U Electron-u, prozor aplikacije je zapravo instanca klase `BrowserWindow`. Glavni proces koristi ovu klasu da kreira i kontroliše prozore (Windows) u aplikaciji.
+
+•	Kreiranje prozora: Glavni proces koristi `BrowserWindow` objekat za kreiranje novih prozora aplikacije. Ovaj objekat omogućava da se postave osnovna svojstva prozora, kao što su veličina, pozicija, naslov, ponašanje pri minimizaciji ili zatvaranju itd.
+
+•	Renderovanje sadržaja: `BrowserWindow` učitava i prikazuje HTML, CSS i JavaScript sadržaj koji dolazi iz render procesa. U većini slučajeva, render proces učitava lokalnu HTML stranicu (ako koristite statički sadržaj) ili pokreće aplikaciju kao web aplikaciju (ako koristite dinamički generisan sadržaj iz servisa ili API-ja).
+
+•	Mogućnosti kontrole: Glavni proces može da menja ponašanje prozora u bilo kom trenutku. Na primer, može da minimizuje prozor, zatvori ga, promeni njegovu veličinu, skupi ga u sistemsku traku (system tray), doda menije i obavštenja, ili izvrši bilo koju drugu operaciju.
+
+Primer kreiranja prozora u glavnom procesu:
 ```javascript
-const { BrowserWindow } = require('electron');
-const win = new BrowserWindow({ width: 800, height: 600 });
-win.loadURL('https://github.com');
-```
-  
-  - Svaki prozor (BrowserWindow) pokreće svoj **renderer proces**.
-  - Glavni proces može komunicirati s renderer procesom putem objekta `webContents`.
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
 
-#### Životni ciklus aplikacije:
-Glavni proces takođe kontroliše životni ciklus aplikacije, pomoću **`app`** modula. Na primer, možete dodati logiku da aplikacija automatski zatvori kada svi prozori budu zatvoreni (osim na macOS-u).
+let mainWindow;
 
-**Primer**:
-```javascript
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+// Funkcija za kreiranje prozora
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 500,
+    height: 890,
+
+    webPreferences: {
+      nodeIntegration: false,
+    },
+  });
+
+  // Učitaj sadržaj u prozor
+  mainWindow.loadURL("http://localhost:3000"); // React aplikacija
+
+  // Kada se prozor zatvori, postavi mainWindow na null (čišćenje resursa)
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
+}
+
+// Kada je aplikacija spremna
+app.on("ready", createWindow);
+
+// Kada su svi prozori zatvoreni, zatvori aplikaciju
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
 });
+
 ```
 
-#### Korišćenje Nativnih API-ja:
-Glavni proces omogućava pristup nativnim funkcijama operativnog sistema, kao što su **meni**, **dijalozi** i **ikone u sistemskoj traci**.
+**3. Kontroliše životni ciklus aplikacije**
 
+Životni ciklus aplikacije u Electron-u obuhvata sve faze tokom kojih se aplikacija pokreće, izvršava i zatvara. Glavni proces je odgovoran za praćenje i upravljanje tim fazama.
+
+•	Pokretanje aplikacije: kada korisnik pokrene aplikaciju, glavni proces je prvi koji se aktivira i započinje izvršavanje. U ovoj fazi, glavni proces kreira početne prozore i omogućava sve inicijalizacione procese.
+
+•	Čekanje na zatvaranje aplikacije: glavni proces nadgleda sve prozore i kada svi prozori budu zatvoreni, on takođe zatvara aplikaciju. Na nekim platformama (npr. macOS), aplikacija može ostati aktivna čak i kada su svi prozori zatvoreni, ali je glavni proces i dalje odgovoran za prepoznavanje kada je aplikacija spremna da se zatvori.
+
+•	Preporučeni postupci pri zatvaranju: Elektron omogućava da se kod za čišćenje ili završne operacije (kao što su snimanje podataka, završavanje pozadinskih zadataka itd.) izvrši pre nego što aplikacija bude potpuno zatvorena.
+
+Kontrola životnog ciklusa aplikacije u glavnom procesu:
+```javascript
+const { app } = require('electron');
+
+// Kada je aplikacija spremna, pokreće se glavni proces
+app.whenReady().then(() => {
+  console.log("Aplikacija je spremna!");
+});
+
+// Kada su svi prozori zatvoreni, zatvori aplikaciju
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') { // Na macOS-u, aplikacija ostaje u Dock-u
+    app.quit();  // Izlazak iz aplikacije na Windows/Linux
+  }
+});
+
+
+```
 ### Renderer proces (Renderer Process)
 
 **Renderer proces** se pokreće za svaki prozor aplikacije i odgovoran je za renderovanje web sadržaja. On koristi **Chromium** engine, pa se kod u ovom procesu ponaša kao običan web kod (HTML, CSS, JavaScript).
@@ -92,15 +150,19 @@ Zbog **kontekstne izolacije**, preload skripta ne može direktno menjati globaln
 # Prednosti i mane
 
 **Prednosti:** <br />
-        -Jedna baza koda za više platformi (Windows, macOS, Linux). <br />
-        -Upotreba web tehnologija (HTML, CSS, JavaScript) što omogućava lakši prelazak sa web developmenta na desktop aplikacije. <br />
-        -Velika zajednica i ekosistem alata, pluginova i biblioteka. <br />
-        -Brza izrada prototipova zahvaljujući jednostavnom okruženju. <br />
-**Mane:**  <br />
-        -Visoka potrošnja resursa: Svaka aplikacija dolazi sa sopstvenim Chromium i Node.js instancama, što povećava memorijsku i procesorsku potrošnju.<br />
-        -Performanse: Elektron aplikacije mogu biti sporije u odnosu na nativne aplikacije zbog dodatnog sloja Chromium-a.<br />
-        -Veći fajlovi: Aplikacije mogu imati veće veličine instalacija zbog uključenih zavisnosti kao što su Chromium i Node.js.<br />
+  •  Jedan kod za sve platforme: aplikacija se jednom razvija i može raditi na Windowsu, macOS-u i Linux-u, čime se smanjuje potreba za održavanjem različitih kodnih baza za svaku platformu.<br />
+  •  Brzi razvoj: korišćenje web tehnologija znači da se već mogu koristiti popularne biblioteke i alati koji se koriste za web razvoj, kao što su React, Vue.js, Redux, Axios i drugi.<br />
+  •  Laka distribucija: Electron omogućava lako pakovanje i distribuciju aplikacija kao izvršnih fajlova za sve glavne platforme, što čini jednostavnijim proces postavljanja aplikacije za krajnje korisnike.<br />
+  •  Pristup lokalnim resursima: korišćenjem Node.js, Electron omogućava jednostavan pristup lokalnim resursima, poput fajl sistema, baza podataka, sistemskih funkcionalnosti itd.<br />
+  •  Brza prototipizacija: ako ste već upoznati sa React-om i web tehnologijama, možete brzo napraviti prototipove desktop aplikacija.<br />
 
+**Mane:**  <br />
+•  Veća veličina aplikacije: Electron aplikacije obično imaju veće veličine od tradicionalnih desktop aplikacija jer moraju uključivati Chromium i Node.js runtime zajedno sa kodom. Na primer, jednostavna aplikacija može zauzimati više od 100 MB prostora. <br />
+•  Potrošnja resursa: zbog Chromium-a, Electron aplikacije mogu koristiti više memorije i CPU resursa nego native aplikacije. Ovo je izraženo kod manjih aplikacija ili uređaja sa ograničenim resursima. <br />
+•  Nedostatak native feel-a: iako Electron omogućava kreiranje aplikacija koje izgledaju kao desktop aplikacije, korisnički interfejs može delovati „teže“ ili „ne prirodno“, jer se oslanja na Chromium za rendering. <br />
+•  Potreba za ažuriranjem Chromium-a: ako se koristi najnovija verzija Electron-a, možda ćete morati redovno ažurirati Chromium (i Node.js), što može doneti izazove u kompatibilnosti sa određenim bibliotekama ili funkcionalnostima. <br />
+•  Sigurnosni izazovi: korišćenje Node.js i web tehnologija u istoj aplikaciji može dovesti do sigurnosnih izazova, naročito u kontekstu manipulacije sa sistemskim resursima. <br />
+     
 
 # Preduslovi
 Pre nego što započnete sa radom u Electron-u, morate da imate sledeće alate i tehnologije instalirane na svom računaru:
