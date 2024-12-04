@@ -7,6 +7,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 500,
     height: 890,
+    resizable: false,
     icon: path.join(__dirname, "..", "icon.ico"),
     webPreferences: {
       nodeIntegration: false,
@@ -29,8 +30,8 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
+// app.on("activate", () => {
+//   if (mainWindow === null) {
+//     createWindow();
+//   }
+// });
