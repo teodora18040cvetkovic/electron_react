@@ -119,6 +119,7 @@ app.on('window-all-closed', () => {
   *	**Renderovanje HTML, CSS i JavaScript:** Renderer proces koristi Chromium engine za renderovanje sadržaja unutar aplikacije, kao što bi to radio bilo koji web browser. Zadatak renderer procesa je da prikaže korisnički interfejs, bilo da je statički (HTML + CSS) ili dinamički (JavaScript koji komunicira sa serverom ili backendom).<br />
   *	**Izolacija i sigurnost:** Renderer proces se pokreće unutar izolovanog okruženja kako bi se povećala sigurnost. To znači da ne može direktno pristupiti sistemskim resursima ili Node.js API-jima. Da bi komunicirao sa sistemom, koristi **preload skripte** ili **IPC** mehanizme za slanje i primanje podataka između glavnog procesa i renderer procesa.<br />
   *	**Context Isolation:** Electron pruža kontekstnu izolaciju koja sprečava da renderer proces menja globalne varijable i direktno manipuliše sa kodom glavnog procesa. Ova zaštita pomaže da se aplikacije zaštite od napada kao što su Cross-Site Scripting (XSS). Preload skripte omogućavaju sigurno izlaganje API-ja.<br />
+  
 **2. Komunikacija sa glavnim procesom**<br />
 *	**IPC (Inter-Process Communication):** Renderer proces komunicira sa glavnim procesom koristeći IPC (Inter-Process Communication). Kroz IPC, renderer proces može da šalje poruke glavnom procesu, na primer, da otvori fajl, da pošalje korisničke podatke, ili da pokrene neku sistemsku funkciju koja nije dozvoljena unutar renderer procesa.<br />
 Primer IPC komunikacije:<br />
