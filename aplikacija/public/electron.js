@@ -11,7 +11,7 @@ function createWindow() {
     icon: path.join(__dirname, "..", "icon.ico"),
     webPreferences: {
       nodeIntegration: false,
-      preload: path.join(__dirname, "preload.js"), // optional, for communication between React and Electron
+      //preload: path.join(__dirname, "preload.js"), // optional, for communication between React and Electron
     },
   });
   mainWindow.setMenuBarVisibility(false);
