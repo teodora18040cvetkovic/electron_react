@@ -51,7 +51,7 @@ U Electron-u, prozor aplikacije je zapravo instanca klase `BrowserWindow`. Glavn
   *	**Mogućnosti kontrole:** Glavni proces može da menja ponašanje prozora u bilo kom trenutku. Na primer, može da minimizuje prozor, zatvori ga, promeni njegovu veličinu, skupi ga u sistemsku traku (system tray), doda menije i obavštenja, ili izvrši bilo koju drugu operaciju.<br />
 Primer kreiranja prozora u glavnom procesu:
 ```javascript
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
 let mainWindow;
@@ -229,25 +229,25 @@ npm install -g electron
 **1.  Inicijalizujte novi projekat**
 
 U terminalu kreirajte novi direktorijum i pređite u njega:
-   ```bash
-   mkdir my-electron-app
-   cd my-electron-app
-   ```
+```bash
+mkdir my-electron-app
+cd my-electron-app
+```
    
 **2. Inicijalizujte Node.js projekat**
 
 Pokrenite komandu da kreirate `package.json` fajl:
-   ```bash
-   npm init
-   ```
+```bash
+npm init
+```
 Ova komanda će vas voditi kroz nekoliko pitanja o vašem projektu. Možete pritisnuti Enter da biste prihvatili podrazumevane vrednosti.
 
 **3. Instalirajte Electron kao zavisnost**
    
 Da biste dodali Electron u svoj projekat, koristite:
-   ```bash
-   npm install electron --save-dev
-   ```
+```bash
+npm install electron --save-dev
+```
 
 **4. Kreirajte osnovne fajlove za aplikaciju**
 U glavnom direktorijumu vašeg projekta, napravite fajlove kao što su:
@@ -255,7 +255,7 @@ U glavnom direktorijumu vašeg projekta, napravite fajlove kao što su:
   - `main.js`: JavaScript fajl koji će sadržati glavni proces vaše aplikacije.
 
 **Primer `index.html` fajla:**
-   ```html
+```html
    <!DOCTYPE html>
    <html>
    <head>
@@ -266,19 +266,19 @@ U glavnom direktorijumu vašeg projekta, napravite fajlove kao što su:
      <p>This is your first Electron app.</p>
    </body>
    </html>
-   ```
+```
 
 **Primer `main.js` fajla:**
 
 Sledeća linija koda vrši pozivanje modula iz Electron biblioteke.
-   ```javascript
-   const { app, BrowserWindow } = require('electron')
-   ```
+```javascript
+const { app, BrowserWindow } = require('electron')
+```
    - `app`: Ovaj objekat se koristi za kontrolu životnog ciklusa aplikacije (kao što su pokretanje i zatvaranje aplikacije).
    - `BrowserWindow`: Ovaj objekat je korišćen za kreiranje novih prozora u aplikaciji. Svaka instanca BrowserWindow predstavlja jedan prozor (window) u aplikaciji.
 
 ### Funkcija za kreiranje prozora
-  ```javascript
+```javascript
    function createWindow() {
      const win = new BrowserWindow({
        width: 800,
@@ -290,7 +290,7 @@ Sledeća linija koda vrši pozivanje modula iz Electron biblioteke.
 
      win.loadFile('index.html')
    }
-   ```
+```
 Funkcija `createWindow`, koristi se za kreiranje novog prozora aplikacije. 
   -	Kreiranje prozora: new BrowserWindow({...}) kreira novi prozor sa određenim opcijama.
       -	`width: 800`: Širina prozora je 800 piksela.
@@ -316,16 +316,16 @@ Ova linija znači da će se funkcija createWindow() pozvati čim aplikacija bude
 # Kreiranje Electron aplikacije sa React framework-om
 **1. Postavljanje React Aplikacije**
 Pokretanjem sledeće komande kreira se React aplikacija sa nazivom `my_app`. Potrebno je preći u direktorijum u kome se nalazi aplikacija.
- ```bash
-   npx create-react-app my_app
-   cd my_app
-  ```
+```bash
+ npx create-react-app my_app
+ cd my_app
+```
 
 **2. Instalacija Electron-a**
 
 Sledeća komanda instalira Electron u React apliakciji.
 ```bash
-  npm install electron --save-dev
+npm install electron --save-dev
 ```
 **3. Postavljanje Electron-a**
 
