@@ -69,7 +69,7 @@ function createWindow() {
 
   // Učitaj sadržaj u prozor
   mainWindow.loadURL("http://localhost:3000"); // React aplikacija
-  //mainWindow.loadFile("indeh.html"); // Lokalna html stranica
+  //mainWindow.loadFile("index.html"); // Lokalna html stranica
 
   // Kada se prozor zatvori, postavi mainWindow na null (čišćenje resursa)
   mainWindow.on("closed", () => {
