@@ -100,7 +100,7 @@ const { app } = require('electron');
 
 // Kada je aplikacija spremna, pokreće se glavni proces
 app.whenReady().then(() => {
-  console.log("Aplikacija je spremna!");
+  console.log("App is ready!");
 });
 
 // Kada su svi prozori zatvoreni, zatvori aplikaciju
@@ -128,11 +128,11 @@ Renderer proces (JavaScript kod u aplikaciji):
 const { ipcRenderer } = require('electron');
 
 // Poslati poruku glavnom procesu
-ipcRenderer.send('pozdrav', 'Zdravo iz renderer procesa!');
+ipcRenderer.send('hello', 'Hello from renderer process!');
 
 // Primanje odgovora od glavnog procesa
-ipcRenderer.on('odgovor', (event, message) => {
-  console.log(message); // 'Zdravo od glavnog procesa!'
+ipcRenderer.on('response', (event, message) => {
+  console.log(message); // 'Hello from main process!'
 });
 ```
 Glavni proces (JavaScript kod u glavnom procesu):
@@ -140,11 +140,11 @@ Glavni proces (JavaScript kod u glavnom procesu):
 const { ipcMain } = require('electron');
 
 // Prihvatiti poruku od renderer procesa
-ipcMain.on('pozdrav', (event, arg) => {
-  console.log(arg); // 'Zdravo iz renderer procesa!'
+ipcMain.on('hello', (event, arg) => {
+  console.log(arg); // 'Hello from renderer process!'
   
   // Poslati odgovor nazad renderer procesu
-  event.reply('odgovor', 'Zdravo od glavnog procesa!');
+  event.reply('response', 'Hello from main process!');
 });
 ```
 **3. Preload skripte i sigurnost**<br />
