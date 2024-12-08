@@ -426,7 +426,7 @@ Zatim je potrebno dadati sledeću liniju koda:
   },  
  ```
   - `concurrently`: pokreće dve komande u isto vreme.
-  - `"cross-env BROWSER=none npm start"`: pokreće React razvojni server (kroz `npm start`), ali bez otvaranja preglednika (`BROWSER=none`).
+  - `"cross-env BROWSER=none npm start"`: pokreće React razvojni server (kroz `npm start`), ali bez otvaranja pretraživača (`BROWSER=none`).
   - `"wait-on http://localhost:3000 && electron ."`: čeka da React server bude dostupan na `http://localhost:3000`, a zatim pokreće Electron aplikaciju koja učitava React aplikaciju.
     
 **4. Pokretanje aplikacije**
