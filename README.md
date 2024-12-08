@@ -298,7 +298,7 @@ Funkcija `createWindow`, koristi se za kreiranje novog prozora aplikacije.
   -	Kreiranje prozora: new BrowserWindow({...}) kreira novi prozor sa određenim opcijama.
       -	`width: 800`: Širina prozora je 800 piksela.
       -	`height: 600`: Visina prozora je 600 piksela.
-      - `webPreferences`: Ovaj objekat sadrži dodatne opcije vezane za internetske stranice učitane unutar prozora.
+      - `webPreferences`: Ovaj objekat sadrži dodatne opcije vezane za internet stranice učitane unutar prozora.
           - `nodeIntegration: true`: Omogućava korišćenje Node.js funkcionalnosti direktno u renderujućem procesu (HTML/JS stranici unutar prozora). Ovo znači da možete koristiti Node.js API-e (npr. fs, path, i druge funkcionalnosti) direktno u vašem front-end kodu. Međutim, ovo može predstavljati sigurnosni rizik, pa se u modernim aplikacijama obično koristi `contextBridge` i `preload` skripte za bolju sigurnost.  
 - Učitavanje HTML fajla: `win.loadFile('index.html')` govori Electron-u da učita HTML fajl sa imenom `index.html` u novom prozoru. Ovo je osnovni sadržaj koji će biti prikazan u prozoru.
 
