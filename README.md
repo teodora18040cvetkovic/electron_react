@@ -317,6 +317,7 @@ Ova linija znači da će se funkcija createWindow() pozvati čim aplikacija bude
      })
 ```
 **5. Modifikovanje `package.json` fajla za pokretanje aplikacije**
+
 U `package.json` fajlu potrebno je dodati skriptu za pokretanje Electron aplikacije. 
 ```javascript
 "scripts": {
@@ -330,6 +331,7 @@ npm start
 ```
 # Kreiranje Electron aplikacije sa React framework-om
 **1. Postavljanje React Aplikacije**
+
 Pokretanjem sledeće komande kreira se React aplikacija sa nazivom `my_app`. Potrebno je preći u direktorijum u kome se nalazi aplikacija.
 ```bash
  npx create-react-app my_app
@@ -398,11 +400,13 @@ Ova skripta izlaže specifične Electron funkcionalnosti React renderer procesu.
 ### Priprema aplikacije za pokretanje
 
 **1. Build-ovanje React aplikacije**
+
 Sledeća komanda će build-ovati React alipkaciju i kreirati `build` direktorijum koji sadrži optimizovanu verziju aplikacije.
 ```bash
 npm run build
 ```
 **2. Modifikovanje electron.js fajla**
+
 U `electron.js` promeni liniju koja učitava React aplikaciju:
  ```javascript
  mainWindow.loadURL("http://localhost:3000"); => mainWindow.loadFile(path.join(__dirname,'..' ,'build', 'index.html'));
@@ -410,7 +414,8 @@ U `electron.js` promeni liniju koja učitava React aplikaciju:
 Ovo osigurava da kada je Electron aplikacija upakovana, učitaće izgrađenu React aplikaciju iz `build` foldera.
 
 **3. Modifikovanje `package.json`**
-   U `package.json` dodaje se skripta za pokretanje Electron apliakcije sa React-om. Prvo je potrebno izvršiti sledeće komande u terminalu:
+
+U `package.json` dodaje se skripta za pokretanje Electron apliakcije sa React-om. Prvo je potrebno izvršiti sledeće komande u terminalu:
 ```bash
    npm install concurrently cross-env wait-on
 ```
@@ -430,6 +435,7 @@ Zatim je potrebno dadati sledeću liniju koda:
   - `"wait-on http://localhost:3000 && electron ."`: čeka da React server bude dostupan na `http://localhost:3000`, a zatim pokreće Electron aplikaciju koja učitava React aplikaciju.
     
 **4. Pokretanje aplikacije**
+
 Prvo je potrebno izvršiti sledeću komandu u terminalu:
 ```bash
 npm run electron-react
@@ -440,11 +446,13 @@ Ova komanda vrši pokretanje Electron desktop aplikacije sa React-om.
 Da bi upakovali Electron aplikaciju u distribucioni format (kao što su `.exe` za Windows, `.dmg` za macOS, ili `.AppImage` za Linux), možete koristiti alate kao što je `electron-builder`.
 
 **1. Instalacija electron-builder**
+
 Sledeća komanda vrši instalaciju electron-builder-a.
 ```bash
 npm install electron-builder --save-dev
 ```
 **3. Konfiguracija `electron-builder`:**
+
 Potrebno je dodati `build` konfiguraciju u `package.json`:
 ```json
 ...
