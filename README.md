@@ -256,23 +256,24 @@ U glavnom direktorijumu vašeg projekta, napravite fajlove kao što su:
 
 **Primer `index.html` fajla:**
 ```html
-   <!DOCTYPE html>
-   <html>
-   <head>
-     <title>Hello Electron</title>
-   </head>
-   <body>
-     <h1>Hello, Electron!</h1>
-     <p>This is your first Electron app.</p>
-   </body>
-   </html>
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>Hello Electron</title>
+    </head>
+    <body>
+      <h1>Hello, Electron!</h1>
+      <p>This is your first Electron app.</p>
+    </body>
+  </html>
 ```
 
 **Primer `main.js` fajla:**
 
 Sledeća linija koda vrši pozivanje modula iz Electron biblioteke.
 ```javascript
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron');
+const path = require("path");
 ```
    - `app`: Ovaj objekat se koristi za kontrolu životnog ciklusa aplikacije (kao što su pokretanje i zatvaranje aplikacije).
    - `BrowserWindow`: Ovaj objekat je korišćen za kreiranje novih prozora u aplikaciji. Svaka instanca BrowserWindow predstavlja jedan prozor (window) u aplikaciji.
@@ -281,6 +282,7 @@ const { app, BrowserWindow } = require('electron')
 ```javascript
    function createWindow() {
      const win = new BrowserWindow({
+       title: "First App",
        width: 800,
        height: 600,
        webPreferences: {
@@ -288,7 +290,7 @@ const { app, BrowserWindow } = require('electron')
        }
      })
 
-     win.loadFile('index.html')
+     win.loadFile(path.join(__dirname, "./renderer/index.html"));
    }
 ```
 Funkcija `createWindow`, koristi se za kreiranje novog prozora aplikacije. 
@@ -312,6 +314,18 @@ Ova linija znači da će se funkcija createWindow() pozvati čim aplikacija bude
          app.quit()
        }
      })
+```
+**5. Modifikovanje `package.json` fajla za pokretanje aplikacije**
+U `package.json` fajlu potrebno je dodati skriptu za pokretanje Electron aplikacije. 
+```javascript
+"scripts": {
+    ...
+    "start": "electron ."
+  },
+```
+Aplikacija se pokreće izvršavanjem sledeće komande u terminalu.
+```bash
+npm start
 ```
 # Kreiranje Electron aplikacije sa React framework-om
 **1. Postavljanje React Aplikacije**
