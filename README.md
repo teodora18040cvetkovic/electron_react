@@ -250,6 +250,7 @@ npm install electron --save-dev
 ```
 
 **4. Kreirajte osnovne fajlove za aplikaciju**
+
 U glavnom direktorijumu vašeg projekta, napravite fajlove kao što su:
   - `index.html`: HTML fajl koji će se koristiti za interfejs aplikacije.  
   - `main.js`: JavaScript fajl koji će sadržati glavni proces vaše aplikacije.
