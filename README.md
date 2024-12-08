@@ -470,7 +470,9 @@ Potrebno je dodati `build` konfiguraciju u `package.json`:
 }
 ```
 Ova konfiguracija će odrediti kako treba da se pakuje aplikacija, koje platforme treba da se izgrade i gde treba da ide izlaz.
+
 **4. Build-ovanje aplikaciju:**
+
 U package.json dodati liniju:
 ```javascript
  "scripts": {
@@ -486,6 +488,7 @@ npm run electron-pack
 Ovo će upakovati Vašu Electron aplikaciju i kreirati instalacioni fajl za platformu na kojoj se nalazite. Na primer, za macOS će kreirati `.dmg`, za Windows `.exe`, ili za Linux `.AppImage` u `dist` folderu.
 
 **5. Distribucija Aplikacije**
+
 Nakon što se proces izgradnje završi, možete distribuirati svoju upakovanu aplikaciju. Pakovana aplikacija će biti smeštena u `dist` direktorijumu koji ste definisali u konfiguraciji `build`.
 
 
