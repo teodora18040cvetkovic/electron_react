@@ -430,11 +430,11 @@ Zatim je potrebno dadati sledeću liniju koda:
   - `"wait-on http://localhost:3000 && electron ."`: čeka da React server bude dostupan na `http://localhost:3000`, a zatim pokreće Electron aplikaciju koja učitava React aplikaciju.
     
 **4. Pokretanje aplikacije**
-    Prvo je potrebno izvršiti sledeću komandu u terminalu:
-    ```bash
-    npm run electron-react
-    ```
-    Ova komanda vrši pokretanje Electron desktop aplikacije sa React-om.
+Prvo je potrebno izvršiti sledeću komandu u terminalu:
+```bash
+npm run electron-react
+```
+Ova komanda vrši pokretanje Electron desktop aplikacije sa React-om.
    
 ### Pakovanje Electron aplikacije
 Da bi upakovali Electron aplikaciju u distribucioni format (kao što su `.exe` za Windows, `.dmg` za macOS, ili `.AppImage` za Linux), možete koristiti alate kao što je `electron-builder`.
